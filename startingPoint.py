@@ -175,7 +175,7 @@ def graphData(stock,MA1,MA2):
         stockFile =[]
         try:
             #sourceCode = urllib2.urlopen(urlToVisit).read()
-            fileObject = open('AAPL.csv','r')            
+            fileObject = open('data/AAPL.csv','r')            
             sourceCode = fileObject.read()
             splitSource = sourceCode.split('\n')
             for eachLine in splitSource:
