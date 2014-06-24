@@ -6,7 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import matplotlib.dates as mdates
-from matplotlib.dates import num2date
 from matplotlib.finance import candlestick
 import matplotlib
 import pylab
@@ -37,30 +36,32 @@ def initGridStyle(stock):
     #set graph title
     plt.suptitle(stock.upper(),color='w')    
     #?
-    plt.setp(ax1.get_xticklabels(),visible=False)    
-    plt.subplots_adjust(left=.09,bottom=.14,right=.94, top=.95, wspace=.20, hspace=0)    
+    plt.setp(ax1.get_xticklabels(),visible=True)    
+    plt.subplots_adjust(left=.09,bottom=.14,right=.94, top=.95, wspace=.20, hspace=0)
+    for label in ax1.xaxis.get_ticklabels():
+        label.set_rotation(45)    
     return (fig,ax1)
 
 def getNumpyArray(MA2,stock):
     newAr = []
-    conn = sqlite3.connect("stock.sqlite")
-    cursor = conn.execute("SELECT time, open, close, high, low, volume FROM ticks where symbol = '{0}' order by time".format(stock))
+    conn = sqlite3.connect("penny.sqlite")
+    cursor = conn.execute("SELECT time, open, close, high, low, volume FROM ticks where symbol = '{0}' and time like '%2014-06-24%' order by time".format(stock))
     for row in cursor:
         newAr.append('{0},{1},{2},{3},{4},{5}'.format(row[0],row[1],row[2],row[3],row[4],row[5]))
-    (date,openp, closep, highp, lowp,volume) = np.loadtxt(newAr,delimiter=',',unpack=True, converters={0:mdates.strpdate2num('%Y-%m-%d %H:%M:%S')})
+    (date,openp, closep, highp, lowp,volume) = np.loadtxt(newAr,delimiter=',',unpack=True, converters={0:mdates.strpdate2num("%Y-%m-%d %H:%M:%S")})
     conn.close()
     x = 0
     y = len(date)
     newAr = []
     while x < y:
-        appendLine = date[x]+x,float(openp[x]),float(closep[x]),float(highp[x]),float(lowp[x]),volume[x]
+        appendLine = date[x],float(openp[x]),float(closep[x]),float(highp[x]),float(lowp[x]),volume[x]
         newAr.append(appendLine)
         x += 1
     SP = len(date[MA2-1:])
     return newAr,SP
 
-stock = 'AMZN'    
+stock = 'AHFD'    
 (fig,ax1) = initGridStyle(stock)
-newAr,SP = getNumpyArray(50,stock)
-candlestick(ax1, newAr[-SP:], width=.6, colorup='#53c156', colordown='#ff1717')    
+newAr,SP = getNumpyArray(1,stock)
+candlestick(ax1, newAr[-SP:], width=30/86400.0, colorup='#53c156', colordown='#ff1717')    
 plt.show()
