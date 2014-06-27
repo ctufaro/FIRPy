@@ -15,7 +15,7 @@ green = '#53c156'
 red = '#ff1717'
 stock = None
 
-def initTopGrid():
+def initTopGrid(sharedAxis):
     pass
 
 def initMiddleGrid():
@@ -65,12 +65,23 @@ def initBottomGrid(sharedAxis):
     
 def getStockDataArray():
     newAr = []
+    easyDate = []
     conn = sqlite3.connect("penny.sqlite")
-    sql = "SELECT time, open, close, high, low, volume FROM ticks where symbol = '{0}' and time like '%2014-06-25%' order by time".format(stock)
-    cursor = conn.execute(sql)    
+    
+    sql0 = "SELECT substr(time,0,11)[time], open,close,high,low,volume FROM ticks WHERE symbol = '{0}' GROUP BY symbol,substr(time,0,11) ORDER BY id".format(stock)
+    sql0format = "%Y-%m-%d"
+    
+    sql1 = "SELECT time, open, close, high, low, volume FROM ticks where symbol = '{0}' and time like '%2014-06-26%' order by time".format(stock)
+    sql1format="%Y-%m-%d %H:%M:%S"
+    
+    sql2 = "SELECT time, open, close, high, low, volume FROM ticks where symbol = '{0}' order by time".format(stock)
+    sql2format="%Y-%m-%d %H:%M:%S"
+
+    cursor = conn.execute(sql2)    
     for row in cursor:
+        easyDate.append(row[0])
         newAr.append('{0},{1},{2},{3},{4},{5}'.format(row[0],row[1],row[2],row[3],row[4],row[5]))
-    (date,openp, closep, highp, lowp,volume) = np.loadtxt(newAr,delimiter=',',unpack=True, converters={0:mdates.strpdate2num("%Y-%m-%d %H:%M:%S")})
+    (date,openp, closep, highp, lowp,volume) = np.loadtxt(newAr,delimiter=',',unpack=True, converters={0:mdates.strpdate2num(sql2format)})
     conn.close()
     x = 0
     y = len(date)
@@ -80,12 +91,106 @@ def getStockDataArray():
         newAr.append(appendLine)
         x += 1
     #SP = len(date[MA2-1:])
-    return newAr,date,openp, closep, highp, lowp,volume   
+    return newAr,date,openp, closep, highp, lowp, volume, easyDate   
     
 def getMovingAverage(values,window):
     weigths = np.repeat(1.0, window)/window
     smas = np.convolve(values, weigths, 'valid')
     return smas # as a numpy array    
+
+def getSwingIndex(date, openp, closep, highp, lowp, LM):
+    
+    SwInY = []
+    SwInDate = []
+    x = 1
+    
+    def calc_R(H2,C1,L2,O1,LM):
+        x = H2-C1
+        y = L2-C1
+        z = H2-L2
+
+        if z < x > y:
+            #print 'x wins!'
+            R = (H2-C1)-(.5*(L2-C1))+(.25*(C1-O1))
+            #print R
+            return R
+        elif x < y > z:
+            #print 'y wins!'
+            R = (L2-C1)-(.5*(H2-C1))+(.25*(C1-O1))
+            #print R
+            return R
+
+        elif x < z > y:
+            #print 'z wins!'
+            R = (H2-L2)+(.25*(C1-O1))
+            #print R
+            return R
+
+
+    def calc_K(H2,L2,C1):
+        x = H2-C1
+        y = L2-C1
+
+        if x > y:
+            K=x
+            return K
+        elif x < y:
+            K=y
+            return K
+        else:
+            return 0            
+    
+    while  x < len(date):        
+        try:
+            O1 = openp[x-1]
+            O2 = openp[x]
+            H1 = highp[x-1]
+            H2 = highp[x]
+            L1 = lowp[x-1]
+            L2 = lowp[x]
+            C1 = closep[x-1]
+            C2 = closep[x]
+            
+            R = calc_R(H2,C1,L2,O1,LM)
+            K = calc_K(H2,L2,C1)
+            
+            if R!=0:           
+                SwIn = 50*((C2-C1+(.5*(C2-O2))+(.25*(C1-O1)))/R)*(K/LM)            
+                SwInY.append(SwIn)
+                SwInDate.append(date[x])
+            
+            x += 1
+        except Exception as e:
+            #print str(e)
+            x += 1
+        
+    return SwInY,SwInDate
+
+def getRSI(prices, date, n=10):
+    deltas = np.diff(prices)
+    seed = deltas[:n+1]
+    up = seed[seed>=0].sum()/n
+    down = -seed[seed<0].sum()/n
+    rs = up/down
+    rsi = np.zeros_like(prices)
+    rsi[:n] = 100. - 100./(1.+rs)
+
+    for i in range(n, len(prices)):
+        delta = deltas[i-1] # cause the diff is 1 shorter
+
+        if delta>0:
+            upval = delta
+            downval = 0.
+        else:
+            upval = 0.
+            downval = -delta
+
+        up = (up*(n-1) + upval)/n
+        down = (down*(n-1) + downval)/n
+
+        rs = up/down
+        rsi[i] = 100. - 100./(1.+rs)
+    return rsi    
 
 def getCommandLineArgs():
     global stock
@@ -96,23 +201,25 @@ def getCommandLineArgs():
         stock = str((sys.argv)[1]) 
     
 def plotMainCandleStick(ax1,newAr):
-    candlestick(ax1, newAr[0:], width=30/86400.0, colorup=green, colordown=red)
+    candlestick(ax1, newAr[0:], width=30/86400.0, colorup=green, colordown=red) #30/86400.0
     
 def plotGrid(axis,xdata,ydata,labelp):
     axis.plot(xdata,ydata,'#e1edf9',label=labelp, linewidth=1.5)
     
 #init functions    
 getCommandLineArgs() 
-axisTop = initTopGrid()
 axisMiddle = initMiddleGrid()
+axisTop = initTopGrid(axisMiddle)
 axisBottom = initBottomGrid(axisMiddle)
 
 #gathering indicator data
-newAr, date, openp, closep, highp, lowp, volume = getStockDataArray()
+newAr, date, openp, closep, highp, lowp, volume, easyDate = getStockDataArray()
 movingAverage = getMovingAverage(closep, 1)
+SwInY,SwInDate = getSwingIndex(date, openp, closep, highp, lowp, 1)
+rsi = getRSI(closep,easyDate)
 
 #main plots
-plotMainCandleStick(axisMiddle,newAr)
-plotGrid(axisMiddle,date,movingAverage,'Moving Average')
-plotGrid(axisBottom,date,movingAverage,'Moving Average')
-plt.show()
+#plotMainCandleStick(axisMiddle,newAr)
+#plotGrid(axisMiddle,date,movingAverage,'Moving Average')
+#plotGrid(axisBottom,date,rsi,'RSI')
+#plt.show()
