@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FIRPy.DomainObjects
+namespace FIRPy.FeedAPIs
 {
-    public abstract class StockFeeds
+    public enum FeedProviders
     {
+        Google,Yahoo,Bloomberg
     }
 }

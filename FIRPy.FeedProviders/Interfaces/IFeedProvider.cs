@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FIRPy.FeedAPIs
 {
-    public class BloombergFeed : IFeedProvider
+    public interface IFeedProvider
     {
     }
 }

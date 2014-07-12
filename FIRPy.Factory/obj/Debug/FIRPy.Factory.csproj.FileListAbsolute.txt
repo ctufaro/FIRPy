@@ -1,7 +1,7 @@
-C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\obj\Debug\FIRPy.Factory.csprojResolveAssemblyReference.cache
 C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.Factory.dll
 C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.Factory.pdb
-C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.DomainObjects.dll
-C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.DomainObjects.pdb
 C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\obj\Debug\FIRPy.Factory.dll
 C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\obj\Debug\FIRPy.Factory.pdb
+C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.FeedAPIs.dll
+C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.FeedAPIs.pdb
+C:\Users\Chris\My Projects\FIRPy\FIRPy.Factory\obj\Debug\FIRPy.Factory.csprojResolveAssemblyReference.cache

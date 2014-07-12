@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FIRPy.FeedProviders
+namespace FIRPy.FeedAPIs
 {
-    class GoogleFeed
+    public class GoogleFeed : IFeedProvider
     {
     }
 }

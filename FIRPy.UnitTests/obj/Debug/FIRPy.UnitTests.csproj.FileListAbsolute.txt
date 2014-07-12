@@ -1,0 +1,9 @@
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.UnitTests.dll
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.UnitTests.pdb
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.Factory.dll
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.FeedAPIs.dll
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.Factory.pdb
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.FeedAPIs.pdb
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.csprojResolveAssemblyReference.cache
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.dll
+C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.pdb
