@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A54D1B11-C2FC-4018-BCBA-82C99E7E9413}</ProjectGuid>
+    <ProjectGuid>6fab9b0a-6923-47aa-b785-0f5ee4a96ee5</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FIRPy.Notifications</RootNamespace>
-    <AssemblyName>FIRPy.Notifications</AssemblyName>
+    <RootNamespace>FIRPy.FeedProviders</RootNamespace>
+    <AssemblyName>FIRPy.FeedProviders</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

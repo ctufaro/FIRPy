@@ -1,7 +1,37 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.DomainObjects", "FIRPy.DomainObjects\FIRPy.DomainObjects.csproj", "{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Factory", "FIRPy.Factory\FIRPy.Factory.csproj", "{2E635A30-36D4-4081-91AF-52C4DE4057C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.ReportEngine", "FIRPy.ReportEngine\FIRPy.ReportEngine.csproj", "{914ED228-A947-4017-B89C-73F2CFA022D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Notifications", "FIRPy.Notifications\FIRPy.Notifications.csproj", "{A54D1B11-C2FC-4018-BCBA-82C99E7E9413}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E635A30-36D4-4081-91AF-52C4DE4057C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E635A30-36D4-4081-91AF-52C4DE4057C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E635A30-36D4-4081-91AF-52C4DE4057C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E635A30-36D4-4081-91AF-52C4DE4057C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{914ED228-A947-4017-B89C-73F2CFA022D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{914ED228-A947-4017-B89C-73F2CFA022D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{914ED228-A947-4017-B89C-73F2CFA022D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{914ED228-A947-4017-B89C-73F2CFA022D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A54D1B11-C2FC-4018-BCBA-82C99E7E9413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A54D1B11-C2FC-4018-BCBA-82C99E7E9413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A54D1B11-C2FC-4018-BCBA-82C99E7E9413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A54D1B11-C2FC-4018-BCBA-82C99E7E9413}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

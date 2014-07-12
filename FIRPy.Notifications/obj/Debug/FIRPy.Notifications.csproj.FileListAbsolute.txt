@@ -1,0 +1,4 @@
+C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\bin\Debug\FIRPy.Notifications.dll
+C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\bin\Debug\FIRPy.Notifications.pdb
+C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\obj\Debug\FIRPy.Notifications.dll
+C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\obj\Debug\FIRPy.Notifications.pdb

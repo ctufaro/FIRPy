@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FIRPy.DomainObjects
 {
-    public class Class1
+    public abstract class StockFeeds
     {
     }
 }
