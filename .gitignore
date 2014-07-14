@@ -2,3 +2,6 @@
 *.pdb
 *.cache
 *.suo
+*.trx
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*

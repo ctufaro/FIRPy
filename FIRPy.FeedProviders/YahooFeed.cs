@@ -21,10 +21,5 @@ namespace FIRPy.FeedAPIs
             }
         }
 
-
-        public override List<string> BuiltQuoteURLS(string[] quotes, int interval, int period, string[] dataPoints)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
