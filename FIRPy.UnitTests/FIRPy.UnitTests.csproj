@@ -60,13 +60,9 @@
       <Project>{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}</Project>
       <Name>FIRPy.DomainObjects</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FIRPy.Factory\FIRPy.Factory.csproj">
-      <Project>{2E635A30-36D4-4081-91AF-52C4DE4057C8}</Project>
-      <Name>FIRPy.Factory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FIRPy.FeedProviders\FIRPy.FeedAPIs.csproj">
+    <ProjectReference Include="..\FIRPy.FeedProviders\FIRPy.FeedAPI.csproj">
       <Project>{42340BA2-8F08-4ECF-B047-CB46E5616948}</Project>
-      <Name>FIRPy.FeedAPIs</Name>
+      <Name>FIRPy.FeedAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

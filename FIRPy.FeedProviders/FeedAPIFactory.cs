@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FIRPy.FeedAPIs;
 
-
-namespace FIRPy.Factory
+namespace FIRPy.FeedAPI
 {
-    public static class FeedsFactory
+    public static class FeedAPIFactory
     {
         public static FeedProvider GetStockFeedFactory(FeedProviders stockFeedProvider)
         {
             switch (stockFeedProvider)
             {
                 case FeedProviders.Google:
-                    return new GoogleFeed();
+                    return new GoogleFeedAPI();
                 case FeedProviders.Bloomberg:
-                    return new BloombergFeed();
+                    return new BloombergFeedAPI();
                 case FeedProviders.Yahoo:
-                    return new YahooFeed();
+                    return new YahooFeedAPI();
                 default:
                     return null;
             }

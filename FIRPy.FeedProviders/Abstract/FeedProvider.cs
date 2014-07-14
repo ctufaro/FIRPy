@@ -5,13 +5,14 @@ using System.Net;
 using System.Text;
 using FIRPy.DomainObjects;
 
-namespace FIRPy.FeedAPIs
+namespace FIRPy.FeedAPI
 {
     public abstract class FeedProvider
     {
         public abstract string TickFeedURL { get; }
         public abstract string QuoteFeedURL { get; }
         public abstract List<Tick> GetTicks(string[] quotes, int interval, int period, string[] dataPoints);
+        public abstract void SaveTicks(List<Tick> ticks);
         public abstract List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate);
         public string[] GetRequestURL(string url)
         {

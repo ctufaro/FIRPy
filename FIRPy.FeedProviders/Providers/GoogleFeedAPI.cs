@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using FIRPy.DomainObjects;
 
-namespace FIRPy.FeedAPIs
+namespace FIRPy.FeedAPI
 {
-    public class GoogleFeed : FeedProvider
+    public class GoogleFeedAPI : FeedProvider
     {
         public override string TickFeedURL
         {
@@ -15,7 +15,7 @@ namespace FIRPy.FeedAPIs
 
         public override string QuoteFeedURL
         {
-            get { return "http://www.google.com/finance/historical?q={0}&startdate={1}&enddate={2}s&output=csv"; }
+            get { return "http://www.google.com/finance/historical?q={0}&startdate={1}&enddate={2}&output=csv"; }
         }
         
         public override List<Tick> GetTicks(string[] quotes, int interval, int period, string[] dataPoints)
@@ -32,6 +32,11 @@ namespace FIRPy.FeedAPIs
         }
 
         public override List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SaveTicks(List<Tick> ticks)
         {
             throw new NotImplementedException();
         }

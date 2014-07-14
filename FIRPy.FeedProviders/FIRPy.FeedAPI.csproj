@@ -8,8 +8,8 @@
     <ProjectGuid>{42340BA2-8F08-4ECF-B047-CB46E5616948}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FIRPy.FeedAPIs</RootNamespace>
-    <AssemblyName>FIRPy.FeedAPIs</AssemblyName>
+    <RootNamespace>FIRPy.FeedAPI</RootNamespace>
+    <AssemblyName>FIRPy.FeedAPI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,14 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BloombergFeed.cs" />
+    <Compile Include="Providers\BloombergFeedAPI.cs" />
     <Compile Include="Enums\Enums.cs" />
-    <Compile Include="GoogleFeed.cs" />
+    <Compile Include="FeedAPIFactory.cs" />
+    <Compile Include="Providers\GoogleFeedAPI.cs" />
     <Compile Include="Abstract\FeedProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="YahooFeed.cs" />
+    <Compile Include="Providers\YahooFeedAPI.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FIRPy.DataAccessLayer\FIRPy.DataAccessLayer.csproj">
+      <Project>{5A6EB25D-6540-44B5-8266-3205E3082DD8}</Project>
+      <Name>FIRPy.DataAccessLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FIRPy.DomainObjects\FIRPy.DomainObjects.csproj">
       <Project>{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}</Project>
       <Name>FIRPy.DomainObjects</Name>

@@ -13,7 +13,7 @@ namespace FIRPy.UnitTests
     public class DatabaseTest
     {
         [TestMethod]
-        public void Save_Data_To_SQLite_Database()
+        public void Select_Data_From_SQLite_Database()
         {
             //SQLite sql = new SQLite(@"C:\Documents and Settings\ctufaro\My Projects\pysand\penny.sqlite");
             //var something = sql.GetDataTable("select * from ticks");
