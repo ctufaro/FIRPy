@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="a8c6d71d-61d5-4aa8-8eff-d946fbfa34a7" name="ctufaro@VM-DEV-DEV3 2014-07-14 10:50:39" runUser="MHTNY\ctufaro" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="b9585e89-8fc7-4923-88e7-34671be267e9">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="ctufaro_VM-DEV-DEV3 2014-07-14 10_50_39">
+      <DeploymentItem filename="C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.DomainObjects\bin\Debug\FIRPy.DomainObjects.dll" />
+      <DeploymentItem filename="C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.Factory.dll" />
+      <DeploymentItem filename="C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.FeedProviders\bin\Debug\FIRPy.FeedAPIs.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2014-07-14T10:50:39.7445299-04:00" queuing="2014-07-14T10:50:40.4476684-04:00" start="2014-07-14T10:50:40.5726708-04:00" finish="2014-07-14T10:51:00.6199307-04:00" />
+  <ResultSummary outcome="Error">
+    <Counters total="1" executed="1" error="0" failed="0" timeout="0" aborted="1" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" passed="0" completed="0" inProgress="0" pending="0" />
+    <RunInfos>
+      <RunInfo computerName="VM-DEV-DEV3" outcome="Error" timestamp="2014-07-14T10:51:00.6199307-04:00">
+        <Text>Test host process exited unexpectedly.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="Get_Built_URLs_Test" storage="c:\documents and settings\ctufaro\my projects\firpy\firpy.unittests\bin\debug\firpy.unittests.dll" id="82989686-50c3-f600-9e9f-83519102a24d">
+      <Execution id="5228a8e0-2f8e-4399-81c3-995d8e8b6cc6" />
+      <TestMethod codeBase="C:/Documents and Settings/ctufaro/My Projects/FIRPy/FIRPy.UnitTests/bin/Debug/FIRPy.UnitTests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="FIRPy.UnitTests.FactoryTest, FIRPy.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Get_Built_URLs_Test" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="82989686-50c3-f600-9e9f-83519102a24d" executionId="5228a8e0-2f8e-4399-81c3-995d8e8b6cc6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="5228a8e0-2f8e-4399-81c3-995d8e8b6cc6" testId="82989686-50c3-f600-9e9f-83519102a24d" testName="Get_Built_URLs_Test" computerName="VM-DEV-DEV3" duration="00:00:19.9222575" startTime="2014-07-14T10:50:40.6976732-04:00" endTime="2014-07-14T10:51:00.6199307-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Aborted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5228a8e0-2f8e-4399-81c3-995d8e8b6cc6">
+    </UnitTestResult>
+  </Results>
+</TestRun>

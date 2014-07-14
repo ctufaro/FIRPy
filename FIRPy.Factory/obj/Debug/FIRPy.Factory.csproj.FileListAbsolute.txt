@@ -12,3 +12,5 @@ C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRP
 C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Factory\obj\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Factory\obj\Debug\FIRPy.Factory.dll
 C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Factory\obj\Debug\FIRPy.Factory.pdb
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.DomainObjects.dll
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Factory\bin\Debug\FIRPy.DomainObjects.pdb

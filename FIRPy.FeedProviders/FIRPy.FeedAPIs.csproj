@@ -47,6 +47,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YahooFeed.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FIRPy.DomainObjects\FIRPy.DomainObjects.csproj">
+      <Project>{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}</Project>
+      <Name>FIRPy.DomainObjects</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

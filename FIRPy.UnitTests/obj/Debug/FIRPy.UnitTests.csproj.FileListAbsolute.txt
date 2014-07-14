@@ -16,3 +16,5 @@ C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FI
 C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.dll
 C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.pdb
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.DomainObjects.dll
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.DomainObjects.pdb
