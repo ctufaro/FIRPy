@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.FeedAPI", "FIRPy.Feed
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.UnitTests", "FIRPy.UnitTests\FIRPy.UnitTests.csproj", "{80B1A5DB-F7CC-4128-A28C-29B5D83F69BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.DataAccessLayer", "FIRPy.DataAccessLayer\FIRPy.DataAccessLayer.csproj", "{5A6EB25D-6540-44B5-8266-3205E3082DD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.DataAccess", "FIRPy.DataAccessLayer\FIRPy.DataAccess.csproj", "{5A6EB25D-6540-44B5-8266-3205E3082DD8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", "{A9BC5D19-11C2-4F36-9CE8-34AA049292F6}"
 	ProjectSection(SolutionItems) = preProject

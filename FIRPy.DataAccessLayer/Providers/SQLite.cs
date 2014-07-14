@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 
-namespace FIRPy.DataAccessLayer
+namespace FIRPy.DataAccess
 {
-    public class SQLite
+    public class SQLite : BaseDataAccess
     {
         String dbConnection;
 
@@ -46,7 +46,7 @@ namespace FIRPy.DataAccessLayer
         /// </summary>
         /// <param name="sql">The SQL to run</param>
         /// <returns>A DataTable containing the result set.</returns>
-        public DataTable GetDataTable(string sql)
+        public override DataTable GetDataTable(string sql)
         {
             DataTable dt = new DataTable();
             try
@@ -72,7 +72,7 @@ namespace FIRPy.DataAccessLayer
         /// </summary>
         /// <param name="sql">The SQL to be run.</param>
         /// <returns>An Integer containing the number of rows updated.</returns>
-        public int ExecuteNonQuery(string sql)
+        public override int ExecuteNonQuery(string sql)
         {
             SQLiteConnection cnn = new SQLiteConnection(dbConnection);
             cnn.Open();
@@ -88,7 +88,7 @@ namespace FIRPy.DataAccessLayer
         /// </summary>
         /// <param name="sql">The query to run.</param>
         /// <returns>A string.</returns>
-        public string ExecuteScalar(string sql)
+        public override string ExecuteScalar(string sql)
         {
             SQLiteConnection cnn = new SQLiteConnection(dbConnection);
             cnn.Open();
@@ -110,7 +110,7 @@ namespace FIRPy.DataAccessLayer
         /// <param name="data">A dictionary containing Column names and their new values.</param>
         /// <param name="where">The where clause for the update statement.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Update(String tableName, Dictionary<String, String> data, String where)
+        public override bool Update(String tableName, Dictionary<String, String> data, String where)
         {
             String vals = "";
             Boolean returnCode = true;
@@ -139,7 +139,7 @@ namespace FIRPy.DataAccessLayer
         /// <param name="tableName">The table from which to delete.</param>
         /// <param name="where">The where clause for the delete.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Delete(String tableName, String where)
+        public override bool Delete(String tableName, String where)
         {
             Boolean returnCode = true;
             try
@@ -160,7 +160,7 @@ namespace FIRPy.DataAccessLayer
         /// <param name="tableName">The table into which we insert the data.</param>
         /// <param name="data">A dictionary containing the column names and data for the insert.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool Insert(String tableName, Dictionary<String, String> data)
+        public override bool Insert(String tableName, Dictionary<String, String> data)
         {
             String columns = "";
             String values = "";
@@ -188,7 +188,7 @@ namespace FIRPy.DataAccessLayer
         ///     Allows the programmer to easily delete all data from the DB.
         /// </summary>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool ClearDB()
+        public override bool ClearDB()
         {
             DataTable tables;
             try
@@ -211,7 +211,7 @@ namespace FIRPy.DataAccessLayer
         /// </summary>
         /// <param name="table">The name of the table to clear.</param>
         /// <returns>A boolean true or false to signify success or failure.</returns>
-        public bool ClearTable(String table)
+        public override bool ClearTable(String table)
         {
             try
             {
@@ -223,6 +223,8 @@ namespace FIRPy.DataAccessLayer
             {
                 return false;
             }
+
+            
         }
     }
 }

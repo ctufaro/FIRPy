@@ -52,9 +52,9 @@
     <Compile Include="FactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FIRPy.DataAccessLayer\FIRPy.DataAccessLayer.csproj">
+    <ProjectReference Include="..\FIRPy.DataAccessLayer\FIRPy.DataAccess.csproj">
       <Project>{5A6EB25D-6540-44B5-8266-3205E3082DD8}</Project>
-      <Name>FIRPy.DataAccessLayer</Name>
+      <Name>FIRPy.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\FIRPy.DomainObjects\FIRPy.DomainObjects.csproj">
       <Project>{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}</Project>

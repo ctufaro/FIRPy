@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FIRPy.FeedAPIs")]
+[assembly: AssemblyTitle("FIRPy.FeedAPI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Windows User")]
-[assembly: AssemblyProduct("FIRPy.FeedAPIs")]
+[assembly: AssemblyProduct("FIRPy.FeedAPI")]
 [assembly: AssemblyCopyright("Copyright © Windows User 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

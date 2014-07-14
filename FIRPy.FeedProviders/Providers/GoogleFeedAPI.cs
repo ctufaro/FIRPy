@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FIRPy.DomainObjects;
+using FIRPy.DataAccess;
 
 namespace FIRPy.FeedAPI
 {
@@ -36,9 +38,28 @@ namespace FIRPy.FeedAPI
             throw new NotImplementedException();
         }
 
-        public override void SaveTicks(List<Tick> ticks)
+        public override void SaveTicks(List<Tick> ticks, ConfigSettings settings)
         {
-            throw new NotImplementedException();
+            SQLiteBulkInsert sbi = DataAccessFactory.GetBulkDatabase(settings,"ticks");
+            sbi.AddParameter("symbol", DbType.String);
+            sbi.AddParameter("time", DbType.String);
+            sbi.AddParameter("open", DbType.Decimal);
+            sbi.AddParameter("high", DbType.Decimal);
+            sbi.AddParameter("low", DbType.Decimal);
+            sbi.AddParameter("close", DbType.Decimal);
+            sbi.AddParameter("volume", DbType.Int32);
+            //db.ClearTable("ticks");
+            int rowCount = 0;
+            //string sql = "INSERT INTO TICKS (symbol,time,open,high,low,close,volume) VALUES ('{0}','{1}',{2},{3},{4},{5},{6})";
+            foreach (Tick t in ticks)
+            {
+                rowCount = t.Date.Count;
+                for (int i = 0; i < rowCount; i++)
+                {                    
+                    sbi.Insert(new object[] { t.Symbol, t.Date[i], t.Open[i], t.High[i], t.Low[i], t.Close[i], t.Volume[i] });
+                }
+            }
+            sbi.Flush();
         }
 
         private List<string> BuiltTickURLS(string[] quotes, int interval, int period, string[] dataPoints)
