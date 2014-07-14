@@ -9,7 +9,7 @@ namespace FIRPy.Factory
 {
     public static class StockFeedsFactory
     {
-        public static IFeedProvider GetStockFeedFactory(FeedProviders stockFeedProvider)
+        public static FeedProvider GetStockFeedFactory(FeedProviders stockFeedProvider)
         {
             switch (stockFeedProvider)
             {

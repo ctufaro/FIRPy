@@ -6,14 +6,20 @@ using FIRPy.DomainObjects;
 
 namespace FIRPy.FeedAPIs
 {
-    public class GoogleFeed : IFeedProvider
-    {        
-        public List<Quote> GetQuotes(string[] quotes, int interval, int period, string[] dataPoints)
-        {            
-            throw new NotImplementedException();
+    public class GoogleFeed : FeedProvider
+    {
+        public override List<Quote> GetQuotes(string[] quotes, int interval, int period, string[] dataPoints)
+        {
+            List<string> urls = BuiltQuoteURLS(quotes, interval, period, dataPoints);
+            foreach (string url in urls)
+            {
+                string retval = base.GetRequestURL(url);
+                //TODO:parse each string returned into list
+            }
+            return null;
         }
 
-        public string QuotesURL
+        public override string QuotesURL
         {
             get
             {
@@ -21,10 +27,10 @@ namespace FIRPy.FeedAPIs
             }
         }
 
-        public List<string> BuiltQuoteURLS(string[] quotes, int interval, int period, string[] dataPoints)
+        public override List<string> BuiltQuoteURLS(string[] quotes, int interval, int period, string[] dataPoints)
         {
             List<string> builtURLs = new List<string>();
-            string fields = string.Join(", ", dataPoints.Select(dp=>dp[0]));
+            string fields = string.Join(", ", dataPoints.Select(dp=>dp[0]));            
             foreach (string quote in quotes)
             {
                 builtURLs.Add(string.Format(this.QuotesURL, quote, interval, period, fields));

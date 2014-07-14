@@ -6,27 +6,23 @@ using FIRPy.DomainObjects;
 
 namespace FIRPy.FeedAPIs
 {
-    public class BloombergFeed : IFeedProvider
+    public class BloombergFeed : FeedProvider
     {
-        public List<Quote> GetQuotes(string[] quotes, int interval, int period, string[] dataPoints)
+        public override List<Quote> GetQuotes(string[] quotes, int interval, int period, string[] dataPoints)
         {
             throw new NotImplementedException();
         }
 
-        public string QuotesURL
+        public override string QuotesURL
         {
             get
             {
                 throw new NotImplementedException();
             }
-            set
-            {
-                throw new NotImplementedException();
-            }
         }
 
 
-        public List<string> BuiltQuoteURLS(string[] quotes, int interval, int period, string[] dataPoints)
+        public override List<string> BuiltQuoteURLS(string[] quotes, int interval, int period, string[] dataPoints)
         {
             throw new NotImplementedException();
         }
