@@ -7,3 +7,12 @@ C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.FeedAPIs.pdb
 C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.csprojResolveAssemblyReference.cache
 C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.dll
 C:\Users\Chris\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.pdb
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.UnitTests.dll
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.UnitTests.pdb
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.Factory.dll
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.FeedAPIs.dll
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.Factory.pdb
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\bin\Debug\FIRPy.FeedAPIs.pdb
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.dll
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.UnitTests\obj\Debug\FIRPy.UnitTests.pdb

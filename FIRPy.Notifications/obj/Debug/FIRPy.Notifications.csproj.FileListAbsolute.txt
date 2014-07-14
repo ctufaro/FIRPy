@@ -2,3 +2,8 @@ C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\bin\Debug\FIRPy.Notificatio
 C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\bin\Debug\FIRPy.Notifications.pdb
 C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\obj\Debug\FIRPy.Notifications.dll
 C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\obj\Debug\FIRPy.Notifications.pdb
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Notifications\bin\Debug\FIRPy.Notifications.dll
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Notifications\bin\Debug\FIRPy.Notifications.pdb
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Notifications\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Notifications\obj\Debug\FIRPy.Notifications.dll
+C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.Notifications\obj\Debug\FIRPy.Notifications.pdb
