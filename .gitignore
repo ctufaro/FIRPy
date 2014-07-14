@@ -1,0 +1,15 @@
+TestResults/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+Bin/
+obj/
+*.dll
+*.pdb
+*.cache
+*.suo
+*.trx
+*.suo
+*.user
+*.vsmdi
+*.testsettings
+*.cachefile
