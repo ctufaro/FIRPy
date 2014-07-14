@@ -7,7 +7,7 @@ using FIRPy.FeedAPIs;
 
 namespace FIRPy.Factory
 {
-    public static class StockFeedsFactory
+    public static class FeedsFactory
     {
         public static FeedProvider GetStockFeedFactory(FeedProviders stockFeedProvider)
         {

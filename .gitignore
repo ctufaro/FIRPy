@@ -3,7 +3,6 @@ TestResults/
 [Bb]uild[Ll]og.*
 Bin/
 obj/
-*.dll
 *.pdb
 *.cache
 *.suo

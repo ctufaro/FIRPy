@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StockFeedsFactory.cs" />
+    <Compile Include="FeedsFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FIRPy.FeedProviders\FIRPy.FeedAPIs.csproj">

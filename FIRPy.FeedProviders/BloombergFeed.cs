@@ -8,12 +8,12 @@ namespace FIRPy.FeedAPIs
 {
     public class BloombergFeed : FeedProvider
     {
-        public override List<Quote> GetQuotes(string[] quotes, int interval, int period, string[] dataPoints)
+        public override List<Tick> GetTicks(string[] quotes, int interval, int period, string[] dataPoints)
         {
             throw new NotImplementedException();
         }
 
-        public override string QuotesURL
+        public override string TickFeedURL
         {
             get
             {
@@ -21,5 +21,15 @@ namespace FIRPy.FeedAPIs
             }
         }
 
+
+        public override string QuoteFeedURL
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

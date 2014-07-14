@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FIRPy.DomainObjects
 {
-    public class Quote
+    public class Tick
     {
         public string Symbol { get; set; }
         public List<string> Date { get; set; }
@@ -15,7 +15,7 @@ namespace FIRPy.DomainObjects
         public List<decimal> Open { get; set; }
         public List<int> Volume { get; set; }
 
-        public Quote()
+        public Tick()
         {
             this.Date = new List<string>();
             this.Close = new List<decimal>();
@@ -24,5 +24,6 @@ namespace FIRPy.DomainObjects
             this.Open = new List<decimal>();
             this.Volume = new List<int>();
         }
+
     }
 }

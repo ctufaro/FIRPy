@@ -8,41 +8,48 @@ namespace FIRPy.FeedAPIs
 {
     public class GoogleFeed : FeedProvider
     {
-        public override List<Quote> GetQuotes(string[] quotes, int interval, int period, string[] dataPoints)
+        public override string TickFeedURL
         {
-            List<Quote> retQuote = new List<Quote>();
-            List<string> urls = BuiltQuoteURLS(quotes, interval, period, dataPoints);
+            get { return "http://www.google.com/finance/getprices?q={0}&i={1}&p={2}d&f={3}"; }
+        }
+
+        public override string QuoteFeedURL
+        {
+            get { return "http://www.google.com/finance/historical?q={0}&startdate={1}&enddate={2}s&output=csv"; }
+        }
+        
+        public override List<Tick> GetTicks(string[] quotes, int interval, int period, string[] dataPoints)
+        {
+            List<Tick> retQuote = new List<Tick>();
+            List<string> urls = BuiltTickURLS(quotes, interval, period, dataPoints);
             foreach (string url in urls)
             {
                 string symbol = url.Split(new string[] { "q=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0];
                 string[] retval = base.GetRequestURL(url);
-                retQuote.Add(ParseLineIntoQuote(symbol, retval));
+                retQuote.Add(ParseLineIntoTick(symbol, retval));
             }
             return retQuote;
         }
 
-        public override string QuotesURL
+        public override List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate)
         {
-            get
-            {
-                return "http://www.google.com/finance/getprices?q={0}&i={1}&p={2}d&f={3}";
-            }
+            throw new NotImplementedException();
         }
 
-        private List<string> BuiltQuoteURLS(string[] quotes, int interval, int period, string[] dataPoints)
+        private List<string> BuiltTickURLS(string[] quotes, int interval, int period, string[] dataPoints)
         {
             List<string> builtURLs = new List<string>();
             string fields = string.Join(",", dataPoints.Select(dp=>dp[0]));            
             foreach (string quote in quotes)
             {
-                builtURLs.Add(string.Format(this.QuotesURL, quote, interval, period, fields));
+                builtURLs.Add(string.Format(this.TickFeedURL, quote, interval, period, fields));
             }
             return builtURLs;
         }
 
-        private Quote ParseLineIntoQuote(string symbol, string[] webLines)
+        private Tick ParseLineIntoTick(string symbol, string[] webLines)
         {
-            Quote quote = new Quote();
+            Tick quote = new Tick();
             quote.Symbol = symbol;
             foreach (string line in webLines)
             {
@@ -59,6 +66,6 @@ namespace FIRPy.FeedAPIs
                 }
             }
             return quote;
-        }    
+        }        
     }
 }
