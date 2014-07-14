@@ -1,9 +1,0 @@
-C:\Users\Chris\My Projects\FIRPy\FIRPy.DomainObjects\bin\Debug\FIRPy.DomainObjects.dll
-C:\Users\Chris\My Projects\FIRPy\FIRPy.DomainObjects\bin\Debug\FIRPy.DomainObjects.pdb
-C:\Users\Chris\My Projects\FIRPy\FIRPy.DomainObjects\obj\Debug\FIRPy.DomainObjects.dll
-C:\Users\Chris\My Projects\FIRPy\FIRPy.DomainObjects\obj\Debug\FIRPy.DomainObjects.pdb
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.DomainObjects\bin\Debug\FIRPy.DomainObjects.dll
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.DomainObjects\bin\Debug\FIRPy.DomainObjects.pdb
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.DomainObjects\obj\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.DomainObjects\obj\Debug\FIRPy.DomainObjects.dll
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.DomainObjects\obj\Debug\FIRPy.DomainObjects.pdb

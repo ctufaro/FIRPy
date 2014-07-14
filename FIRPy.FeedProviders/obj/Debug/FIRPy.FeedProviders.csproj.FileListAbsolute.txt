@@ -1,4 +1,0 @@
-C:\Users\Chris\My Projects\FIRPy\FIRPy.FeedProviders\bin\Debug\FIRPy.FeedProviders.dll
-C:\Users\Chris\My Projects\FIRPy\FIRPy.FeedProviders\bin\Debug\FIRPy.FeedProviders.pdb
-C:\Users\Chris\My Projects\FIRPy\FIRPy.FeedProviders\obj\Debug\FIRPy.FeedProviders.dll
-C:\Users\Chris\My Projects\FIRPy\FIRPy.FeedProviders\obj\Debug\FIRPy.FeedProviders.pdb

@@ -1,9 +1,0 @@
-C:\Users\Chris\My Projects\FIRPy\FIRPy.ReportEngine\bin\Debug\FIRPy.ReportEngine.dll
-C:\Users\Chris\My Projects\FIRPy\FIRPy.ReportEngine\bin\Debug\FIRPy.ReportEngine.pdb
-C:\Users\Chris\My Projects\FIRPy\FIRPy.ReportEngine\obj\Debug\FIRPy.ReportEngine.dll
-C:\Users\Chris\My Projects\FIRPy\FIRPy.ReportEngine\obj\Debug\FIRPy.ReportEngine.pdb
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.ReportEngine\bin\Debug\FIRPy.ReportEngine.dll
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.ReportEngine\bin\Debug\FIRPy.ReportEngine.pdb
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.ReportEngine\obj\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.ReportEngine\obj\Debug\FIRPy.ReportEngine.dll
-C:\Documents and Settings\ctufaro\My Projects\FIRPy\FIRPy.ReportEngine\obj\Debug\FIRPy.ReportEngine.pdb
