@@ -20,11 +20,8 @@ namespace FIRPy.UnitTests
         [TestMethod]
         public void Get_URL_Request_Test()
         {
-            //Stopwatch stopwatch = new Stopwatch();
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
-            //stopwatch.Start();
             var ticks = googleFeed.GetTicks(new string[] { "AEGA" }, 1801, 15, GooglePoints);
-            //stopwatch.Stop();
         }
 
         [TestMethod]
@@ -32,10 +29,10 @@ namespace FIRPy.UnitTests
         {
             Stopwatch stopwatch = new Stopwatch();
             ConfigSettings settings = new ConfigSettings();
-            settings.SQLiteDatabaseLocation = @"C:\Users\Chris\My Projects\sqlite-databases\penny.sqlite";
+            settings.SQLiteDatabaseLocation = @"..\..\..\..\sqlite-databases\penny.sqlite";
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
             stopwatch.Start();
-            var ticks = googleFeed.GetTicks(lotsSymbols, 61, 15, GooglePoints);
+            var ticks = googleFeed.GetTicks(lotsSymbols, 61, 1, GooglePoints);
             googleFeed.SaveTicks(ticks, settings);
             stopwatch.Stop();
         }

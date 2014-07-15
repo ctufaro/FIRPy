@@ -22,25 +22,22 @@ namespace FIRPy.FeedAPI
             get { return "http://www.google.com/finance/historical?q={0}&startdate={1}&enddate={2}&output=csv"; }
         }
         
-        public override List<Tick> GetTicks(string[] quotes, int interval, int period, string[] dataPoints)
+        public override List<Tick> GetTicks(string[] symbols, int interval, int period, string[] dataPoints)
         {
             Object myLock = new object();
 
-            List<Tick> retQuote = new List<Tick>();
-            ConcurrentBag<Tick> retQuote2 = new ConcurrentBag<Tick>();
-            List<string> urls = BuiltTickURLS(quotes, interval, period, dataPoints);
+            List<Tick> retTick = new List<Tick>();
+            List<string> urls = BuiltTickURLS(symbols, interval, period, dataPoints);
             Parallel.ForEach(urls, url =>
             {
                 string symbol = url.Split(new string[] { "q=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0];
                 string[] retval = base.GetRequestURL(url);
-                retQuote2.Add(ParseLineIntoTick(symbol, retval));
-                //lock (myLock)
-                //{
-                //    retQuote.Add(ParseLineIntoTick(symbol, retval));
-                //}
+                lock (myLock)
+                {
+                    retTick.Add(ParseLineIntoTick(symbol, retval));
+                }
             });
-            return retQuote2.ToList<Tick>();
-            //return retQuote;
+            return retTick;
         }
 
         public override List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate)
@@ -50,9 +47,9 @@ namespace FIRPy.FeedAPI
 
         public override void SaveTicks(List<Tick> ticks, ConfigSettings settings)
         {
-            SQLiteBulkInsert sbi = DataAccessFactory.GetBulkDatabase(settings,"ticks");
+            SQLiteBulkInsert sbi = DataAccessFactory.GetBulkDatabase(settings,"ticks");            
             sbi.AddParameter("symbol", DbType.String);
-            sbi.AddParameter("time", DbType.String);
+            sbi.AddParameter("time", DbType.DateTime);
             sbi.AddParameter("open", DbType.Decimal);
             sbi.AddParameter("high", DbType.Decimal);
             sbi.AddParameter("low", DbType.Decimal);
@@ -60,7 +57,6 @@ namespace FIRPy.FeedAPI
             sbi.AddParameter("volume", DbType.Int32);
             //db.ClearTable("ticks");
             int rowCount = 0;
-            //string sql = "INSERT INTO TICKS (symbol,time,open,high,low,close,volume) VALUES ('{0}','{1}',{2},{3},{4},{5},{6})";
             foreach (Tick t in ticks)
             {
                 rowCount = t.Date.Count;
@@ -72,13 +68,13 @@ namespace FIRPy.FeedAPI
             sbi.Flush();
         }
 
-        private List<string> BuiltTickURLS(string[] quotes, int interval, int period, string[] dataPoints)
+        private List<string> BuiltTickURLS(string[] symbols, int interval, int period, string[] dataPoints)
         {
             List<string> builtURLs = new List<string>();
             string fields = string.Join(",", dataPoints.Select(dp=>dp[0]));            
-            foreach (string quote in quotes)
+            foreach (string symbol in symbols)
             {
-                builtURLs.Add(string.Format(this.TickFeedURL, quote, interval, period, fields));
+                builtURLs.Add(string.Format(this.TickFeedURL, symbol, interval, period, fields));
             }
             return builtURLs;
         }
@@ -93,7 +89,7 @@ namespace FIRPy.FeedAPI
                 if (line.StartsWith("a1"))
                 {
                     string[] retArray = line.Split(new string[]{","}, StringSplitOptions.None);
-                    quote.Date.Add(retArray[0]);
+                    quote.Date.Add(FromUnixTime(long.Parse(retArray[0].Substring(1))));                    
                     quote.Close.Add(Decimal.Parse(retArray[1]));
                     quote.High.Add(Decimal.Parse(retArray[2]));
                     quote.Low.Add(Decimal.Parse(retArray[3]));
@@ -102,6 +98,12 @@ namespace FIRPy.FeedAPI
                 }
             }
             return quote;
-        }        
+        }
+
+        private DateTime FromUnixTime(long unixTime)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return epoch.AddSeconds(unixTime);
+        }
     }
 }

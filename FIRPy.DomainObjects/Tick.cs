@@ -8,7 +8,7 @@ namespace FIRPy.DomainObjects
     public class Tick
     {
         public string Symbol { get; set; }
-        public List<string> Date { get; set; }
+        public List<DateTime> Date { get; set; }
         public List<decimal> Close { get; set; }
         public List<decimal> High { get; set; }
         public List<decimal> Low { get; set; }
@@ -17,7 +17,7 @@ namespace FIRPy.DomainObjects
 
         public Tick()
         {
-            this.Date = new List<string>();
+            this.Date = new List<DateTime>();
             this.Close = new List<decimal>();
             this.High = new List<decimal>();
             this.Low = new List<decimal>();
