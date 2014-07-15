@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Text;
 using FIRPy.DomainObjects;
 using FIRPy.DataAccess;
@@ -22,15 +24,23 @@ namespace FIRPy.FeedAPI
         
         public override List<Tick> GetTicks(string[] quotes, int interval, int period, string[] dataPoints)
         {
+            Object myLock = new object();
+
             List<Tick> retQuote = new List<Tick>();
+            ConcurrentBag<Tick> retQuote2 = new ConcurrentBag<Tick>();
             List<string> urls = BuiltTickURLS(quotes, interval, period, dataPoints);
-            foreach (string url in urls)
+            Parallel.ForEach(urls, url =>
             {
                 string symbol = url.Split(new string[] { "q=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0];
                 string[] retval = base.GetRequestURL(url);
-                retQuote.Add(ParseLineIntoTick(symbol, retval));
-            }
-            return retQuote;
+                retQuote2.Add(ParseLineIntoTick(symbol, retval));
+                //lock (myLock)
+                //{
+                //    retQuote.Add(ParseLineIntoTick(symbol, retval));
+                //}
+            });
+            return retQuote2.ToList<Tick>();
+            //return retQuote;
         }
 
         public override List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate)

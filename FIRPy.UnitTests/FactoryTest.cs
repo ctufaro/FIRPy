@@ -32,10 +32,10 @@ namespace FIRPy.UnitTests
         {
             Stopwatch stopwatch = new Stopwatch();
             ConfigSettings settings = new ConfigSettings();
-            settings.SQLiteDatabaseLocation = @"C:\Documents and Settings\ctufaro\My Projects\pysand\penny.sqlite";
+            settings.SQLiteDatabaseLocation = @"C:\Users\Chris\My Projects\sqlite-databases\penny.sqlite";
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
             stopwatch.Start();
-            var ticks = googleFeed.GetTicks(lotsSymbols, 1801, 15, GooglePoints);
+            var ticks = googleFeed.GetTicks(lotsSymbols, 61, 15, GooglePoints);
             googleFeed.SaveTicks(ticks, settings);
             stopwatch.Stop();
         }
