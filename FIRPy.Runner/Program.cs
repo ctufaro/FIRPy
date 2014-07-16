@@ -29,7 +29,7 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(lotsSymbols, 61, 30, GooglePoints);
+            var ticks = googleFeed.GetTicks(lotsSymbols, 121, 30, GooglePoints);
 
             foreach (Tick t in ticks)
             {
