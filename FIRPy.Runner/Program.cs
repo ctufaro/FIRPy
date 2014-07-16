@@ -29,14 +29,14 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(symbols, 61, 30, GooglePoints);
+            var ticks = googleFeed.GetTicks(lotsSymbols, 61, 30, GooglePoints);
 
             foreach (Tick t in ticks)
             {
                 var RSI = RelativeStrengthIndex.RSI(10, t.Close);
             }
 
-            Console.WriteLine("Ticks Saved To Memory @ {0}", stopwatch.Elapsed);
+            Console.WriteLine("Ticks Saved To Memory, RSI calculated @ {0}", stopwatch.Elapsed);
             googleFeed.SaveTicks(ticks, settings, "ticks");
             Console.WriteLine("Ticks Saved To Database @ {0}", stopwatch.Elapsed);
             stopwatch.Stop();
