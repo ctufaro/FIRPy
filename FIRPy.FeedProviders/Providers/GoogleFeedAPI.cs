@@ -45,9 +45,12 @@ namespace FIRPy.FeedAPI
             throw new NotImplementedException();
         }
 
-        public override void SaveTicks(List<Tick> ticks, ConfigSettings settings)
+        public override void SaveTicks(List<Tick> ticks, ConfigSettings settings, string tableName)
         {
-            SQLiteBulkInsert sbi = DataAccessFactory.GetBulkDatabase(settings,"ticks");            
+            SQLiteBulkInsert sbi = DataAccessFactory.GetBulkDatabase(settings, tableName);
+
+            sbi.ClearTable(tableName);
+
             sbi.AddParameter("symbol", DbType.String);
             sbi.AddParameter("time", DbType.DateTime);
             sbi.AddParameter("open", DbType.Decimal);
@@ -55,7 +58,6 @@ namespace FIRPy.FeedAPI
             sbi.AddParameter("low", DbType.Decimal);
             sbi.AddParameter("close", DbType.Decimal);
             sbi.AddParameter("volume", DbType.Int32);
-            //db.ClearTable("ticks");
             int rowCount = 0;
             foreach (Tick t in ticks)
             {
@@ -90,20 +92,21 @@ namespace FIRPy.FeedAPI
                 {
                     string[] retArray = line.Split(new string[]{","}, StringSplitOptions.None);
                     quote.Date.Add(FromUnixTime(long.Parse(retArray[0].Substring(1))));                    
-                    quote.Close.Add(Decimal.Parse(retArray[1]));
-                    quote.High.Add(Decimal.Parse(retArray[2]));
-                    quote.Low.Add(Decimal.Parse(retArray[3]));
-                    quote.Open.Add(Decimal.Parse(retArray[4]));
+                    quote.Close.Add(Double.Parse(retArray[1]));
+                    quote.High.Add(Double.Parse(retArray[2]));
+                    quote.Low.Add(Double.Parse(retArray[3]));
+                    quote.Open.Add(Double.Parse(retArray[4]));
                     quote.Volume.Add(Int32.Parse(retArray[5]));                    
                 }
             }
             return quote;
         }
 
-        private DateTime FromUnixTime(long unixTime)
+        private DateTime FromUnixTime(long unixTimeStamp)
         {
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return epoch.AddSeconds(unixTime);
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
         }
     }
 }

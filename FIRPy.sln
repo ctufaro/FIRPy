@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Runner", "FIRPy.Runner\FIRPy.Runner.csproj", "{87824739-4B01-42E9-AF9E-BE7545B13083}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Indicators", "FIRPy.Indicators\FIRPy.Indicators.csproj", "{294C18CA-844C-4681-8407-43EF14C499C2}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = FIRPy.vsmdi
@@ -104,6 +106,16 @@ Global
 		{87824739-4B01-42E9-AF9E-BE7545B13083}.Release|Mixed Platforms.Build.0 = Release|x86
 		{87824739-4B01-42E9-AF9E-BE7545B13083}.Release|x86.ActiveCfg = Release|x86
 		{87824739-4B01-42E9-AF9E-BE7545B13083}.Release|x86.Build.0 = Release|x86
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{294C18CA-844C-4681-8407-43EF14C499C2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

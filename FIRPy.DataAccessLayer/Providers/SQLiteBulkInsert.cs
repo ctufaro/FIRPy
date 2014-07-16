@@ -146,5 +146,12 @@ namespace FIRPy.DataAccess
                 }
             }
         }
+
+        public void ClearTable(string tableName)
+        {
+            m_cmd = m_dbCon.CreateCommand();
+            m_cmd.CommandText = "DELETE FROM " + tableName;            
+            m_cmd.ExecuteNonQuery();
+        }
     }
 }

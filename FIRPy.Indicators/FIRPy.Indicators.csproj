@@ -2,21 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{87824739-4B01-42E9-AF9E-BE7545B13083}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{294C18CA-844C-4681-8407-43EF14C499C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FIRPy.Runner</RootNamespace>
-    <AssemblyName>FIRPy.Runner</AssemblyName>
+    <RootNamespace>FIRPy.Indicators</RootNamespace>
+    <AssemblyName>FIRPy.Indicators</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,27 +38,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TA-Lib-Core">
+      <HintPath>..\Assemblies\TA-Lib-Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="MACD.cs" />
+    <Compile Include="MovingAverage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FIRPy.DomainObjects\FIRPy.DomainObjects.csproj">
-      <Project>{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}</Project>
-      <Name>FIRPy.DomainObjects</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FIRPy.FeedProviders\FIRPy.FeedAPI.csproj">
-      <Project>{42340BA2-8F08-4ECF-B047-CB46E5616948}</Project>
-      <Name>FIRPy.FeedAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FIRPy.Indicators\FIRPy.Indicators.csproj">
-      <Project>{294C18CA-844C-4681-8407-43EF14C499C2}</Project>
-      <Name>FIRPy.Indicators</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
+    <Compile Include="RelativeStrengthIndex.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

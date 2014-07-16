@@ -12,7 +12,7 @@ namespace FIRPy.FeedAPI
         public abstract string TickFeedURL { get; }
         public abstract string QuoteFeedURL { get; }
         public abstract List<Tick> GetTicks(string[] quotes, int interval, int period, string[] dataPoints);
-        public abstract void SaveTicks(List<Tick> ticks, ConfigSettings settings);
+        public abstract void SaveTicks(List<Tick> ticks, ConfigSettings settings, string tableName);
         public abstract List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate);
         public string[] GetRequestURL(string url)
         {

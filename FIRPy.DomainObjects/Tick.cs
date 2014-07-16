@@ -9,19 +9,19 @@ namespace FIRPy.DomainObjects
     {
         public string Symbol { get; set; }
         public List<DateTime> Date { get; set; }
-        public List<decimal> Close { get; set; }
-        public List<decimal> High { get; set; }
-        public List<decimal> Low { get; set; }
-        public List<decimal> Open { get; set; }
+        public List<double> Close { get; set; }
+        public List<double> High { get; set; }
+        public List<double> Low { get; set; }
+        public List<double> Open { get; set; }
         public List<int> Volume { get; set; }
 
         public Tick()
         {
             this.Date = new List<DateTime>();
-            this.Close = new List<decimal>();
-            this.High = new List<decimal>();
-            this.Low = new List<decimal>();
-            this.Open = new List<decimal>();
+            this.Close = new List<double>();
+            this.High = new List<double>();
+            this.Low = new List<double>();
+            this.Open = new List<double>();
             this.Volume = new List<int>();
         }
 
