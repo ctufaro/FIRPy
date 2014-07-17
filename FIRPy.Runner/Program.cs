@@ -29,21 +29,23 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(lotsSymbols, 121, 30, GooglePoints);
+            var ticks = googleFeed.GetTicks(symbols, 121, 30, GooglePoints);
 
             foreach (var tck in ticks)
             {
-                var shot = tck.TickGroup.Where(x => x.Date.Minute %2 == 0).OrderBy(x => x.Date);
-                var xx = shot.Select(x => x.Close).ToList();
-                var RSI = RelativeStrengthIndex.RSI(10, xx);
+                //5 days - (2 mins) TODO:filter dates to five days
+                var twoMinutesFiveDays = tck.TickGroup.Where(x => x.Date.Minute % 2 == 0).OrderBy(x => x.Date);
+                var d = twoMinutesFiveDays.Select(x => x.Close).ToList();
+                var RSI = RelativeStrengthIndex.RSI(10, d);
 
-                shot = tck.TickGroup.Where(x => x.Date.Minute == 00 || x.Date.Minute == 30).OrderBy(x => x.Date);
-                xx = shot.Select(x => x.Close).ToList();
-                RSI = RelativeStrengthIndex.RSI(10, xx);
+                //1 month - (30 mins, all given dates)
+                var thirtyMinutesOneMonth = tck.TickGroup.Where(x => x.Date.Minute == 00 || x.Date.Minute == 30).OrderBy(x => x.Date);
+                var m = thirtyMinutesOneMonth.Select(x => x.Close).ToList();
+                RSI = RelativeStrengthIndex.RSI(10, m);
             }
 
             Console.WriteLine("Ticks Saved To Memory, RSI calculated @ {0}", stopwatch.Elapsed);
-            //googleFeed.SaveTicks(ticks, settings, "ticks");
+            googleFeed.SaveTicks(ticks, settings, "ticks");
             Console.WriteLine("Ticks Saved To Database @ {0}", stopwatch.Elapsed);
             stopwatch.Stop();
             Console.ReadLine();
