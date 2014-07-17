@@ -22,11 +22,11 @@ namespace FIRPy.FeedAPI
             get { return "http://www.google.com/finance/historical?q={0}&startdate={1}&enddate={2}&output=csv"; }
         }
         
-        public override List<Tick> GetTicks(string[] symbols, int interval, int period, string[] dataPoints)
+        public override List<Ticks> GetTicks(string[] symbols, int interval, int period, string[] dataPoints)
         {
             Object myLock = new object();
 
-            List<Tick> retTick = new List<Tick>();
+            List<Ticks> retTick = new List<Ticks>();
             List<string> urls = BuiltTickURLS(symbols, interval, period, dataPoints);
             Parallel.ForEach(urls, url =>
             {
@@ -61,11 +61,11 @@ namespace FIRPy.FeedAPI
             int rowCount = 0;
             foreach (Tick t in ticks)
             {
-                rowCount = t.Date.Count;
-                for (int i = 0; i < rowCount; i++)
-                {                    
-                    sbi.Insert(new object[] { t.Symbol, t.Date[i], t.Open[i], t.High[i], t.Low[i], t.Close[i], t.Volume[i] });
-                }
+                //rowCount = t.Date.Count;
+                //for (int i = 0; i < rowCount; i++)
+                //{                    
+                //    sbi.Insert(new object[] { t.Symbol, t.Date[i], t.Open[i], t.High[i], t.Low[i], t.Close[i], t.Volume[i] });
+                //}
             }
             sbi.Flush();
         }
@@ -81,9 +81,9 @@ namespace FIRPy.FeedAPI
             return builtURLs;
         }
 
-        private Tick ParseLineIntoTick(string symbol, string[] webLines)
+        private Ticks ParseLineIntoTick(string symbol, string[] webLines)
         {
-            Tick quote = new Tick();
+            Ticks quote = new Ticks();
             quote.Symbol = symbol;
             foreach (string line in webLines)
             {
@@ -91,12 +91,15 @@ namespace FIRPy.FeedAPI
                 if (line.StartsWith("a1"))
                 {
                     string[] retArray = line.Split(new string[]{","}, StringSplitOptions.None);
-                    quote.Date.Add(FromUnixTime(long.Parse(retArray[0].Substring(1))));                    
-                    quote.Close.Add(Double.Parse(retArray[1]));
-                    quote.High.Add(Double.Parse(retArray[2]));
-                    quote.Low.Add(Double.Parse(retArray[3]));
-                    quote.Open.Add(Double.Parse(retArray[4]));
-                    quote.Volume.Add(Int32.Parse(retArray[5]));                    
+                    quote.TickGroup.Add(new Tick
+                    {
+                        Date = FromUnixTime(long.Parse(retArray[0].Substring(1))),
+                        Close = Double.Parse(retArray[1]),
+                        High = Double.Parse(retArray[2]),
+                        Low = Double.Parse(retArray[3]),
+                        Open = Double.Parse(retArray[4]),
+                        Volume = Int32.Parse(retArray[5])
+                    });                
                 }
             }
             return quote;
