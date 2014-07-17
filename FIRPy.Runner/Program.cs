@@ -29,21 +29,23 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(symbols, 121, 30, GooglePoints);
+            var ticks = googleFeed.GetTicks(lotsSymbols, 121, 30, GooglePoints);
 
             foreach (var tck in ticks)
             {
+                var symbol = tck.Symbol;
+
                 //7 days - (2 mins, seven days from current)
                 var twoMinutesFiveDays = tck.TickGroup.Where(x => x.Date >= DateTime.Today.AddDays(-7)).OrderBy(x => x.Date);
                 int twoc = twoMinutesFiveDays.Count();
                 var d = twoMinutesFiveDays.Select(x => x.Close).ToList();
-                var RSI = RelativeStrengthIndex.RSI(10, d);
+                var RSId = RelativeStrengthIndex.RSI(10, d).Last();
 
                 //1 month - (30 mins, all given dates)
                 var thirtyMinutesOneMonth = tck.TickGroup.Where(x => x.Date.Minute == 00 || x.Date.Minute == 30).OrderBy(x => x.Date);
                 int thirtyC = thirtyMinutesOneMonth.Count();
                 var m = thirtyMinutesOneMonth.Select(x => x.Close).ToList();
-                RSI = RelativeStrengthIndex.RSI(10, m);
+                var RSIm = RelativeStrengthIndex.RSI(10, m).Last();
             }
 
             Console.WriteLine("Ticks Saved To Memory, RSI calculated @ {0}", stopwatch.Elapsed);
