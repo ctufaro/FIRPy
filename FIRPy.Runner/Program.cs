@@ -29,48 +29,49 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(lotsSymbols, 121, 30, GooglePoints);
-            string symbol = "";
-            string RSId = "";
-            string RSIm = "";
+            //var ticks = googleFeed.GetTicks(symbols, 121, 30, GooglePoints);            
+            var ticks = googleFeed.GetSavedTicks(settings, "ticks");
+            //string symbol = "";
+            //string RSId = "";
+            //string RSIm = "";
 
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\WriteLines2.txt"))
-            {
+            //using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\WriteLines2.txt"))
+            //{
 
-                foreach (var tck in ticks)
-                {             
-                    symbol = tck.Symbol;
+            //    foreach (var tck in ticks)
+            //    {             
+            //        symbol = tck.Symbol;
 
-                    try
-                    {
-                        //7 days - (2 mins, seven days from current)
-                        var twoMinutesFiveDays = tck.TickGroup.Where(x => x.Date >= DateTime.Today.AddDays(-7)).OrderBy(x => x.Date);
-                        int twoc = twoMinutesFiveDays.Count();
-                        var d = twoMinutesFiveDays.Select(x => x.Close).ToList();
-                        RSId = RelativeStrengthIndex.RSI(10, d).Last().ToString();
-                    }
-                    catch { }
+            //        try
+            //        {
+            //            //7 days - (2 mins, seven days from current)
+            //            var twoMinutesFiveDays = tck.TickGroup.Where(x => x.Date >= DateTime.Today.AddDays(-7)).OrderBy(x => x.Date);
+            //            int twoc = twoMinutesFiveDays.Count();
+            //            var d = twoMinutesFiveDays.Select(x => x.Close).ToList();
+            //            RSId = RelativeStrengthIndex.RSI(10, d).Last().ToString();
+            //        }
+            //        catch { }
 
-                    try
-                    {
-                        //1 month - (30 mins, all given dates)
-                        var thirtyMinutesOneMonth = tck.TickGroup.Where(x => x.Date.Minute == 00 || x.Date.Minute == 30).OrderBy(x => x.Date);
-                        int thirtyC = thirtyMinutesOneMonth.Count();
-                        var m = thirtyMinutesOneMonth.Select(x => x.Close).ToList();
-                        RSIm = RelativeStrengthIndex.RSI(10, m).Last().ToString();
-                    }
-                    catch { }
+            //        try
+            //        {
+            //            //1 month - (30 mins, all given dates)
+            //            var thirtyMinutesOneMonth = tck.TickGroup.Where(x => x.Date.Minute == 00 || x.Date.Minute == 30).OrderBy(x => x.Date);
+            //            int thirtyC = thirtyMinutesOneMonth.Count();
+            //            var m = thirtyMinutesOneMonth.Select(x => x.Close).ToList();
+            //            RSIm = RelativeStrengthIndex.RSI(10, m).Last().ToString();
+            //        }
+            //        catch { }
 
-                    file.WriteLine("Symbol:{0}, RSI7:{1}, RSI30:{2}", symbol, RSId, RSIm);
-                    RSId = "";
-                    RSIm = "";
-                }
-            }
+            //        file.WriteLine("Symbol:{0}, RSI7:{1}, RSI30:{2}", symbol, RSId, RSIm);
+            //        RSId = "";
+            //        RSIm = "";
+            //    }
+            //}
 
-            Console.WriteLine("Ticks Saved To Memory, RSI calculated @ {0}", stopwatch.Elapsed);
-            googleFeed.SaveTicks(ticks, settings, "ticks");
-            Console.WriteLine("Ticks Saved To Database @ {0}", stopwatch.Elapsed);
-            stopwatch.Stop();
+            //Console.WriteLine("Ticks Saved To Memory, RSI calculated @ {0}", stopwatch.Elapsed);
+            //googleFeed.SaveTicks(ticks, settings, "ticks");
+            //Console.WriteLine("Ticks Saved To Database @ {0}", stopwatch.Elapsed);
+            //stopwatch.Stop();
             Console.ReadLine();
         }
     }
