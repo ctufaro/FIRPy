@@ -32,7 +32,12 @@ namespace FIRPy.FeedAPI
             throw new NotImplementedException();
         }
 
-        public override void SaveTicks(List<Tick> ticks, ConfigSettings settings, string tableName)
+        public override void SaveTicks(List<Ticks> ticks, ConfigSettings settings, string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<Ticks> GetSavedTicks(ConfigSettings settings, string tableName)
         {
             throw new NotImplementedException();
         }

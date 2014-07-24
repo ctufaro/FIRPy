@@ -40,12 +40,52 @@ namespace FIRPy.FeedAPI
             return retTick;
         }
 
+        public override List<Ticks> GetSavedTicks(ConfigSettings settings, string tableName)
+        {
+            Dictionary<string, bool> symbols = new Dictionary<string, bool>();
+            List<Ticks> retTick = new List<Ticks>();
+            string sql = "SELECT id,symbol,datetime(time),open,high,low,close,volume FROM {0}";
+            BaseDataAccess sqlite = DataAccessFactory.GetDatabase("SQLite", settings);
+            DataTable dt = sqlite.GetDataTable(string.Format(sql, tableName));
+            Ticks t = null;
+            foreach (DataRow row in dt.Rows)
+            {
+                var symbol = row[1].ToString();
+
+                if (!symbols.ContainsKey(symbol))
+                {
+
+                    if (symbols.Count() > 0)
+                    {
+                        retTick.Add(t);
+                    }
+                    
+                    symbols.Add(symbol, true);
+                    t = new Ticks();
+                    t.Symbol = symbol;
+                }
+
+                t.TickGroup.Add(new Tick()
+                {
+                    Date = DateTime.Parse(row[2].ToString()),
+                    Close = Double.Parse(row[6].ToString()),
+                    High = Double.Parse(row[4].ToString()),
+                    Low = Double.Parse(row[5].ToString()),
+                    Open = Double.Parse(row[3].ToString()),
+                    Volume = Int32.Parse(row[7].ToString())
+                });
+                
+            }
+            retTick.Add(t);
+            return retTick;
+        }
+
         public override List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();
         }
 
-        public override void SaveTicks(List<Tick> ticks, ConfigSettings settings, string tableName)
+        public override void SaveTicks(List<Ticks> ticks, ConfigSettings settings, string tableName)
         {
             SQLiteBulkInsert sbi = DataAccessFactory.GetBulkDatabase(settings, tableName);
 
@@ -57,15 +97,13 @@ namespace FIRPy.FeedAPI
             sbi.AddParameter("high", DbType.Decimal);
             sbi.AddParameter("low", DbType.Decimal);
             sbi.AddParameter("close", DbType.Decimal);
-            sbi.AddParameter("volume", DbType.Int32);
-            int rowCount = 0;
-            foreach (Tick t in ticks)
+            sbi.AddParameter("volume", DbType.Int32);            
+            foreach (Ticks tt in ticks)
             {
-                //rowCount = t.Date.Count;
-                //for (int i = 0; i < rowCount; i++)
-                //{                    
-                //    sbi.Insert(new object[] { t.Symbol, t.Date[i], t.Open[i], t.High[i], t.Low[i], t.Close[i], t.Volume[i] });
-                //}
+                foreach (var t in tt.TickGroup)
+                {
+                    sbi.Insert(new object[] { tt.Symbol, t.Date, t.Open, t.High, t.Low, t.Close, t.Volume });    
+                }
             }
             sbi.Flush();
         }
