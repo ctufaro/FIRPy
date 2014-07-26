@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FIRPy.FeedAPI
+namespace FIRPy.Indicators
 {
-    public enum FeedProviders
+    class Volume
     {
-        Google,Yahoo,Bloomberg
     }
 }

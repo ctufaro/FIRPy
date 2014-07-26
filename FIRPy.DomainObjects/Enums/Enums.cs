@@ -14,4 +14,14 @@ namespace FIRPy.DomainObjects
         public readonly static string Volume = "volume";
         public readonly static string Date = "date";
     }
+
+    public enum FeedAPIProviders
+    {
+        Google, Yahoo, Bloomberg
+    }
+
+    public enum Lists
+    {
+        Penny, SP500, ETFs
+    }
 }

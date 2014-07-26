@@ -9,6 +9,34 @@ namespace FIRPy.DomainObjects
     {
         public string Symbol { get; set; }
         public List<Tick> TickGroup { get; set; }
+        public List<Tick> TickGroup2Minutes5Days
+        {
+            get
+            {
+                if (this.TickGroup != null)
+                {
+                    return this.TickGroup.Where(x => x.Date >= DateTime.Today.AddDays(-7)).OrderBy(x => x.Date).ToList();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public List<Tick> TickGroup30Minutes1Month
+        {
+            get
+            {
+                if (this.TickGroup != null)
+                {
+                    return this.TickGroup.Where(x => x.Date.Minute == 00 || x.Date.Minute == 30).OrderBy(x => x.Date).ToList();
+                }
+                else
+                {
+                    return null;
+                } 
+            }
+        }
 
         public Ticks()
         {
@@ -25,14 +53,5 @@ namespace FIRPy.DomainObjects
         public double Low { get; set; }
         public double Open { get; set; }
         public int Volume { get; set; }
-
-        //public Tick(double Close, double High, double Low, double Open, int Volume)
-        //{
-        //    this.Close = Close;
-        //    this.High = High;
-        //    this.Low = Low;
-        //    this.Open = Open;
-        //    this.Volume = Volume;
-        //}
     }
 }

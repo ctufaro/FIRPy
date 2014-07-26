@@ -18,61 +18,44 @@ namespace FIRPy.Runner
         
         static void Main(string[] args)
         {
-            LoadAndSaveTicks();
-        }
-
-        static void LoadAndSaveTicks()
-        {
             Stopwatch stopwatch = new Stopwatch();
             ConfigSettings settings = new ConfigSettings();
             settings.SQLiteDatabaseLocation = @"..\..\..\..\sqlite-databases\penny.sqlite";
-            FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedProviders.Google);
+            FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
             //var ticks = googleFeed.GetTicks(symbols, 121, 30, GooglePoints);            
             var ticks = googleFeed.GetSavedTicks(settings, "ticks");
-            //string symbol = "";
-            //string RSId = "";
-            //string RSIm = "";
+            RelativeStrengthIndex.RSIEqualToOrGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIEqualToOrGreaterThan70);
+            RelativeStrengthIndex.RSIEqualToOrLessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIEqualToOrLessThan30);
 
-            //using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\WriteLines2.txt"))
-            //{
-
-            //    foreach (var tck in ticks)
-            //    {             
-            //        symbol = tck.Symbol;
-
-            //        try
-            //        {
-            //            //7 days - (2 mins, seven days from current)
-            //            var twoMinutesFiveDays = tck.TickGroup.Where(x => x.Date >= DateTime.Today.AddDays(-7)).OrderBy(x => x.Date);
-            //            int twoc = twoMinutesFiveDays.Count();
-            //            var d = twoMinutesFiveDays.Select(x => x.Close).ToList();
-            //            RSId = RelativeStrengthIndex.RSI(10, d).Last().ToString();
-            //        }
-            //        catch { }
-
-            //        try
-            //        {
-            //            //1 month - (30 mins, all given dates)
-            //            var thirtyMinutesOneMonth = tck.TickGroup.Where(x => x.Date.Minute == 00 || x.Date.Minute == 30).OrderBy(x => x.Date);
-            //            int thirtyC = thirtyMinutesOneMonth.Count();
-            //            var m = thirtyMinutesOneMonth.Select(x => x.Close).ToList();
-            //            RSIm = RelativeStrengthIndex.RSI(10, m).Last().ToString();
-            //        }
-            //        catch { }
-
-            //        file.WriteLine("Symbol:{0}, RSI7:{1}, RSI30:{2}", symbol, RSId, RSIm);
-            //        RSId = "";
-            //        RSIm = "";
-            //    }
-            //}
+            foreach (var t in ticks)
+            {
+                RelativeStrengthIndex.GetRSI(10, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList(), t.Symbol, "5D");
+                RelativeStrengthIndex.GetRSI(10, t.TickGroup30Minutes1Month.Select(x => x.Close).ToList(), t.Symbol, "30D");
+                var macd = MACD.initMACD(0, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList());
+                var macd2 = MACD.initMACD(0, t.TickGroup30Minutes1Month.Select(x => x.Close).ToList());
+            }
 
             //Console.WriteLine("Ticks Saved To Memory, RSI calculated @ {0}", stopwatch.Elapsed);
             //googleFeed.SaveTicks(ticks, settings, "ticks");
-            //Console.WriteLine("Ticks Saved To Database @ {0}", stopwatch.Elapsed);
-            //stopwatch.Stop();
+            //Console.WriteLine("Ticks Saved To Database @ {0}", stopwatch.Elapsed);            
+            Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
+            stopwatch.Stop();
             Console.ReadLine();
         }
+
+
+        #region Indicator Events
+        static void RelativeStrengthIndex_RSIEqualToOrLessThan30(object sender, RelativeStrengthIndexEventArgs e)
+        {
+            Console.WriteLine("{0} {1} RSI: {2}", e.Symbol, e.Period, e.RSI );
+        }
+
+        static void RelativeStrengthIndex_RSIEqualToOrGreaterThan70(object sender, RelativeStrengthIndexEventArgs e)
+        {
+            Console.WriteLine("{0} {1} RSI: {2}", e.Symbol, e.Period, e.RSI);
+        }
+        #endregion
     }
 }

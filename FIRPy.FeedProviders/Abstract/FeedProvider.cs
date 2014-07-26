@@ -34,6 +34,19 @@ namespace FIRPy.FeedAPI
             }
             
         }
+        public string[] GetSymbolsFromList(Lists list)
+        {
+            string[] symbols = null;
+            switch (list)
+            {
+                case(Lists.Penny):
+                    symbols = GetRequestURL(@"https://raw.githubusercontent.com/ctufaro/FIRPy/master/Resources/lists/penny.list");
+                    break;
+                default:
+                    break;
+            }
 
+            return symbols;
+        }
     }
 }

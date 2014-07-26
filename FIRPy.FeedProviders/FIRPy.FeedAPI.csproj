@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Providers\BloombergFeedAPI.cs" />
-    <Compile Include="Enums\Enums.cs" />
     <Compile Include="FeedAPIFactory.cs" />
     <Compile Include="Providers\GoogleFeedAPI.cs" />
     <Compile Include="Abstract\FeedProvider.cs" />

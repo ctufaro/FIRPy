@@ -49,10 +49,18 @@ namespace FIRPy.UnitTests
             int window = 3;
 
             //Act
-            List<double> retArray = RelativeStrengthIndex.RSI(window, closePrices);
+            List<double> retArray = RelativeStrengthIndex.GetRSIArray(window, closePrices);
 
             //Assert
             CollectionAssert.AreEqual(expectedPrices, retArray);
+        }
+
+        [TestMethod]
+        public void Test_MACD_Calculations()
+        {
+            List<double> closePrices = new List<double>() { 1, 2, 3, 4, 5 };
+            var retMACD = MACD.initMACD(0, closePrices);
+            Assert.IsTrue(true);
         }
     }
 }
