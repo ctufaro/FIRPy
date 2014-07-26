@@ -14,20 +14,22 @@ namespace FIRPy.Indicators
 
         public static List<double> initMACD(int window, List<double> data)
         {
-            int begIdx, outNB = 0;
-            List<double> retval = new List<double>();
-            double[] outMACD = new double[data.Count];
-            double[] outMACDSignal = new double[data.Count];
-            double[] outMACDHist = new double[data.Count];
-            Core.Macd(0, data.Count - 1, data.ToArray(), 12, 26, 9, out begIdx, out outNB, outMACD, outMACDSignal, outMACDHist);
-            if (retval.Count() > 0)
-            {
-                return retval;
-            }
-            else
-            {
-                return new List<double> { 0 };
-            }
+            int startIdx = 0;
+            int endIdx = data.Count - 1;
+            int optInFastPeriod = 12;
+            int optInSlowPeriod = 26;
+            int optInSignalPeriod = 9;
+            double[] inReal = data.ToArray();
+
+            int outBegIdx;
+            int outNBElement;
+
+            double[] outMACD = new double[endIdx - startIdx + 1];
+            double[] outMACDSignal = new double[endIdx - startIdx + 1];
+            double[] outMACDHist = new double[endIdx - startIdx + 1];
+
+            Core.RetCode res = Core.Macd(startIdx, endIdx, inReal, optInFastPeriod, optInSlowPeriod, optInSignalPeriod, out  outBegIdx, out  outNBElement, outMACD, outMACDSignal, outMACDHist);
+            return outMACDHist.ToList();
         }
 
         public static List<double> GetMACDArray(int window, List<double> data)

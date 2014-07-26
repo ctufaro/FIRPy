@@ -24,10 +24,10 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            //var ticks = googleFeed.GetTicks(symbols, 121, 30, GooglePoints);            
-            var ticks = googleFeed.GetSavedTicks(settings, "ticks");
-            RelativeStrengthIndex.RSIEqualToOrGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIEqualToOrGreaterThan70);
-            RelativeStrengthIndex.RSIEqualToOrLessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIEqualToOrLessThan30);
+            //var ticks = googleFeed.GetTicks(googleFeed.GetSymbolsFromList(Lists.Penny), 121, 30, GooglePoints);            
+            var ticks = googleFeed.GetSavedTicks(settings, "ticks").Where(t=>t.Symbol.Equals("GEIG"));
+            //RelativeStrengthIndex.RSIEqualToOrGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIEqualToOrGreaterThan70);
+            //RelativeStrengthIndex.RSIEqualToOrLessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIEqualToOrLessThan30);
 
             foreach (var t in ticks)
             {
@@ -35,9 +35,18 @@ namespace FIRPy.Runner
                 RelativeStrengthIndex.GetRSI(10, t.TickGroup30Minutes1Month.Select(x => x.Close).ToList(), t.Symbol, "30D");
                 var macd = MACD.initMACD(0, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList());
                 var macd2 = MACD.initMACD(0, t.TickGroup30Minutes1Month.Select(x => x.Close).ToList());
+
+
+                //delete
+                var xx = t.TickGroup2Minutes5Days.Select(x => x.Date).ToList();
+                for (int i = 0; i < xx.Count; i++)
+                {
+                    Console.WriteLine("Date{0} MACD{1}", xx[i], macd[i]);
+                }
+
             }
 
-            //Console.WriteLine("Ticks Saved To Memory, RSI calculated @ {0}", stopwatch.Elapsed);
+            Console.WriteLine("Ticks Saved To Memory @ {0}", stopwatch.Elapsed);
             //googleFeed.SaveTicks(ticks, settings, "ticks");
             //Console.WriteLine("Ticks Saved To Database @ {0}", stopwatch.Elapsed);            
             Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
