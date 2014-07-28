@@ -42,6 +42,44 @@ namespace FIRPy.Indicators
             MACDEventArgs e = new MACDEventArgs();            
             return 0;
         }
+
+        private static List<double> CalculateXDayEMA(int period, List<double> data)
+        {
+            List<double> retList = new List<double>();
+            double average = data.Take(period).Average();
+            retList.Add(Math.Round(average,2));
+            foreach (var d in data.Skip(period))
+            {
+                var j = 2.0 / (double)(period + 1);
+                var k = d * j;
+                var l = (1 - j);
+                var t = (k + average * l);
+                retList.Add(Math.Round(t,2));
+                average = t;
+            }
+            return retList;
+        }
+
+        private static List<double> SubtractLists(List<double> left, List<double> right)
+        {
+            List<double> retList = new List<double>();
+            int indexOfArray = Math.Abs(right.Count - left.Count);
+            for (int i = 0; i < right.Count; i++)
+            {
+                retList.Add(Math.Round(left[indexOfArray++] - right[i],2));
+            }
+            return retList;
+        }
+
+        public static Tuple<List<double>, List<double>, List<double>> GetMACDInfo(int shortEMA, int longEMA, int signalLine, List<double> data)
+        {
+            var TwelveDayEMA = CalculateXDayEMA(shortEMA, data);
+            var TwentySixDayEMA = CalculateXDayEMA(longEMA, data);
+            var MACD = SubtractLists(TwelveDayEMA, TwentySixDayEMA);
+            var Signal = CalculateXDayEMA(signalLine, MACD);
+            var Histogram = SubtractLists(MACD, Signal);
+            return new Tuple<List<double>, List<double>, List<double>>(MACD, Signal, Histogram);
+        }  
     }
 
     public class MACDEventArgs : System.EventArgs
