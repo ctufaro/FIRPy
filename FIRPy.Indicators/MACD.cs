@@ -43,7 +43,7 @@ namespace FIRPy.Indicators
             return 0;
         }
 
-        private static List<double> CalculateXDayEMA(int period, List<double> data)
+        private static List<double> CalculateXDayEMA(int period, List<double> data, int decimalPlaces)
         {
             List<double> retList = new List<double>();
             double average = data.Take(period).Average();
@@ -54,30 +54,30 @@ namespace FIRPy.Indicators
                 var k = d * j;
                 var l = (1 - j);
                 var t = (k + average * l);
-                retList.Add(Math.Round(t,2));
+                retList.Add(Math.Round(t, decimalPlaces));
                 average = t;
             }
             return retList;
         }
 
-        private static List<double> SubtractLists(List<double> left, List<double> right)
+        private static List<double> SubtractLists(List<double> left, List<double> right, int decimalPlaces)
         {
             List<double> retList = new List<double>();
             int indexOfArray = Math.Abs(right.Count - left.Count);
             for (int i = 0; i < right.Count; i++)
             {
-                retList.Add(Math.Round(left[indexOfArray++] - right[i],2));
+                retList.Add(Math.Round(left[indexOfArray++] - right[i], decimalPlaces));
             }
             return retList;
         }
 
-        public static Tuple<List<double>, List<double>, List<double>> GetMACDInfo(int shortEMA, int longEMA, int signalLine, List<double> data)
+        public static Tuple<List<double>, List<double>, List<double>> GetMACDInfo(int shortEMA, int longEMA, int signalLine, List<double> data, int decimalPlaces)
         {
-            var TwelveDayEMA = CalculateXDayEMA(shortEMA, data);
-            var TwentySixDayEMA = CalculateXDayEMA(longEMA, data);
-            var MACD = SubtractLists(TwelveDayEMA, TwentySixDayEMA);
-            var Signal = CalculateXDayEMA(signalLine, MACD);
-            var Histogram = SubtractLists(MACD, Signal);
+            var TwelveDayEMA = CalculateXDayEMA(shortEMA, data, decimalPlaces);
+            var TwentySixDayEMA = CalculateXDayEMA(longEMA, data, decimalPlaces);
+            var MACD = SubtractLists(TwelveDayEMA, TwentySixDayEMA, decimalPlaces);
+            var Signal = CalculateXDayEMA(signalLine, MACD, decimalPlaces);
+            var Histogram = SubtractLists(MACD, Signal, decimalPlaces);
             return new Tuple<List<double>, List<double>, List<double>>(MACD, Signal, Histogram);
         }  
     }
