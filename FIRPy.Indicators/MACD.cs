@@ -78,7 +78,7 @@ namespace FIRPy.Indicators
             var MACD = SubtractLists(TwelveDayEMA, TwentySixDayEMA, decimalPlaces);
             var Signal = CalculateXDayEMA(signalLine, MACD, decimalPlaces);
             var Histogram = SubtractLists(MACD, Signal, decimalPlaces);
-            return new Tuple<List<double>, List<double>, List<double>>(MACD, Signal, Histogram);
+            return new Tuple<List<double>, List<double>, List<double>>(MACD.Skip(signalLine-1).ToList(), Signal, Histogram);
         }  
     }
 
