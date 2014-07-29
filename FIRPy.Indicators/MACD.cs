@@ -84,44 +84,36 @@ namespace FIRPy.Indicators
             return new Tuple<List<double>, List<double>, List<double>>(MACD.Skip(signalLine-1).ToList(), Signal, Histogram);
         }
 
-        private static void CheckForCrossOver(List<double> histogram)
+        public static void CheckForCrossOver(List<double> histogram)
         {
-            int currentSign = 0;
-            var lastElement = histogram.Last();
+            int lastSign = Math.Sign(histogram.Last());
             MACDEventArgs e = new MACDEventArgs();
-            if (Math.Sign(lastElement) == 0)
+            if (lastSign != 0)
             {
-                return;
-            }
-            else
-            {
-                currentSign = Math.Sign(lastElement);
-                for (int i = histogram.Count-1; i > 0; i--)
+                //reversing histogram
+                for (int i = (histogram.Count - 2); i >= 0; i--)
                 {
-                    var previousValue = Math.Sign(histogram[i]);
-                    if (previousValue != 0)
+                    int currentSign = Math.Sign(histogram[i]);
+                    if (currentSign == 0)
                     {
-                        if (previousValue == -1 && currentSign == 1)
-                        {
-                            if (MACDBuySignal != null)
-                            {
-                                MACDBuySignal(null, e);
-                            }
-                            return;
-                        }
-                        else if (previousValue == 1 && currentSign == -1)
-                        {
-                            if (MACDSellSignal != null)
-                            {
-                                MACDSellSignal(null, e);
-                            }
-                            return;
-                        }
+                        continue;
+                    }
+                    else if (lastSign == 1 && currentSign == -1)
+                    {
+                        MACDBuySignal(null, e);
+                        return;
+                    }
+                    else if (lastSign == -1 && currentSign == 1)
+                    {
+                        MACDSellSignal(null, e);
+                        return;
+                    }
+                    else
+                    {
                         return;
                     }
                 }
             }
-
         }
     }
 
