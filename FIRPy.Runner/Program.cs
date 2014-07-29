@@ -62,6 +62,9 @@ namespace FIRPy.Runner
 
             //googleFeed.SaveTicks(ticks, settings, "ticks");         
             Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
+
+            var hot = notificationsList.Values.Where(x => x.RSIBuySell != null && x.MACDBuySell != null);
+
             stopwatch.Stop();
             Console.ReadLine();
         }
