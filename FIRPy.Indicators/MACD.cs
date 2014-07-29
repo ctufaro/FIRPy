@@ -71,7 +71,7 @@ namespace FIRPy.Indicators
             return retList;
         }
 
-        public static Tuple<List<double>, List<double>, List<double>> GetMACDInfo(int shortEMA, int longEMA, int signalLine, List<double> data, int decimalPlaces)
+        public static Tuple<List<double>, List<double>, List<double>> GetMACDInfo(int shortEMA, int longEMA, int signalLine, List<double> data, int decimalPlaces, string symbol)
         {
             var TwelveDayEMA = CalculateXDayEMA(shortEMA, data, decimalPlaces);
             var TwentySixDayEMA = CalculateXDayEMA(longEMA, data, decimalPlaces);
@@ -79,15 +79,17 @@ namespace FIRPy.Indicators
             var Signal = CalculateXDayEMA(signalLine, MACD, decimalPlaces);
             var Histogram = SubtractLists(MACD, Signal, decimalPlaces);
 
-            CheckForCrossOver(Histogram);
+            CheckForCrossOver(Histogram, symbol);
 
             return new Tuple<List<double>, List<double>, List<double>>(MACD.Skip(signalLine-1).ToList(), Signal, Histogram);
         }
 
-        public static void CheckForCrossOver(List<double> histogram)
+        public static void CheckForCrossOver(List<double> histogram, string symbol)
         {
             int lastSign = Math.Sign(histogram.Last());
             MACDEventArgs e = new MACDEventArgs();
+            e.Symbol = symbol;
+            e.Histogram = histogram.Last();
             if (lastSign != 0)
             {
                 //reversing histogram
@@ -121,6 +123,6 @@ namespace FIRPy.Indicators
     {
         public string Period { get; set; }
         public string Symbol { get; set; }
-        public double RSI { get; set; }
+        public double Histogram { get; set; }
     }
 }
