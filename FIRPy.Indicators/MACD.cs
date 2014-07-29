@@ -9,8 +9,8 @@ namespace FIRPy.Indicators
     public static class MACD
     {
         public delegate void MACDHandler(object sender, MACDEventArgs e);
-        public static event MACDHandler MACDCrossOverEMA;
-        public static event MACDHandler MACDCrossUnderEMA;
+        public static event MACDHandler MACDBuySignal;
+        public static event MACDHandler MACDSellSignal;
 
         public static List<double> initMACD(int window, List<double> data)
         {
@@ -78,8 +78,51 @@ namespace FIRPy.Indicators
             var MACD = SubtractLists(TwelveDayEMA, TwentySixDayEMA, decimalPlaces);
             var Signal = CalculateXDayEMA(signalLine, MACD, decimalPlaces);
             var Histogram = SubtractLists(MACD, Signal, decimalPlaces);
+
+            CheckForCrossOver(Histogram);
+
             return new Tuple<List<double>, List<double>, List<double>>(MACD.Skip(signalLine-1).ToList(), Signal, Histogram);
-        }  
+        }
+
+        private static void CheckForCrossOver(List<double> histogram)
+        {
+            int currentSign = 0;
+            var lastElement = histogram.Last();
+            MACDEventArgs e = new MACDEventArgs();
+            if (Math.Sign(lastElement) == 0)
+            {
+                return;
+            }
+            else
+            {
+                currentSign = Math.Sign(lastElement);
+                for (int i = histogram.Count-1; i > 0; i--)
+                {
+                    var previousValue = Math.Sign(histogram[i]);
+                    if (previousValue != 0)
+                    {
+                        if (previousValue == -1 && currentSign == 1)
+                        {
+                            if (MACDBuySignal != null)
+                            {
+                                MACDBuySignal(null, e);
+                            }
+                            return;
+                        }
+                        else if (previousValue == 1 && currentSign == -1)
+                        {
+                            if (MACDSellSignal != null)
+                            {
+                                MACDSellSignal(null, e);
+                            }
+                            return;
+                        }
+                        return;
+                    }
+                }
+            }
+
+        }
     }
 
     public class MACDEventArgs : System.EventArgs

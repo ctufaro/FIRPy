@@ -28,7 +28,8 @@ namespace FIRPy.Runner
             //var ticks = googleFeed.GetSavedTicks(settings, "ticks");
             //RelativeStrengthIndex.RSIEqualToOrGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIEqualToOrGreaterThan70);
             //RelativeStrengthIndex.RSIEqualToOrLessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIEqualToOrLessThan30);
-
+            MACD.MACDBuySignal += new MACD.MACDHandler(MACD_MACDBuySignal);
+            MACD.MACDSellSignal += new MACD.MACDHandler(MACD_MACDSellSignal);
             foreach (var t in ticks)
             {
                 RelativeStrengthIndex.GetRSI(10, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList(), t.Symbol, "5D");
@@ -40,14 +41,14 @@ namespace FIRPy.Runner
 
 
                 //delete
-                var xx = t.TickGroup2Minutes5Days.Select(x => x.Date).Skip(33).ToList();
-                for (int i = 0; i < macd.Item3.Count; i++)
-                {
-                    //if (macd.Item1[i] == -0.08)
-                    //{
-                        Console.WriteLine("Date {0} MACD {1} {2} {3}", xx[i], macd.Item1[i], macd.Item2[i], macd.Item3[i]);
-                    //}
-                }
+                //var xx = t.TickGroup2Minutes5Days.Select(x => x.Date).Skip(33).ToList();
+                //for (int i = 0; i < macd.Item3.Count; i++)
+                //{
+                //    //if (macd.Item1[i] == -0.08)
+                //    //{
+                //        Console.WriteLine("Date {0} MACD {1} {2} {3}", xx[i], macd.Item1[i], macd.Item2[i], macd.Item3[i]);
+                //    //}
+                //}
 
             }
 
@@ -57,6 +58,16 @@ namespace FIRPy.Runner
             Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
             stopwatch.Stop();
             Console.ReadLine();
+        }
+
+        static void MACD_MACDSellSignal(object sender, MACDEventArgs e)
+        {
+            Console.WriteLine("SELL!");
+        }
+
+        static void MACD_MACDBuySignal(object sender, MACDEventArgs e)
+        {
+            Console.WriteLine("BUY!");
         }
 
 
