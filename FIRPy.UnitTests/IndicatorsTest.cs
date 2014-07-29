@@ -59,14 +59,6 @@ namespace FIRPy.UnitTests
         }
 
         [TestMethod]
-        public void Test_MACD_Calculations()
-        {
-            List<double> closePrices = new List<double>() { 1, 2, 3, 4, 5 };
-            var retMACD = MACD.initMACD(0, closePrices);
-            Assert.IsTrue(true);
-        }
-
-        [TestMethod]
         public void Test_MACD_Crossover_Signals_Using_Last_Element_Of_Histogram()
         {
             MACD.MACDBuySignal += new MACD.MACDHandler(MACD_MACDBuySignal);
@@ -74,56 +66,56 @@ namespace FIRPy.UnitTests
             
             //no crossover should not generate a signal
             List<double> retset = new List<double> { 0, 0, 2, 3 };
-            MACD.CheckForCrossOver(retset, "TEST");
+            MACD.CheckForCrossOver(retset, "TEST", DomainObjects.Periods.ThirtyMinutesThirtyDays);
             Assert.IsFalse(SellSignal);
             Assert.IsFalse(BuySignal);
             ResetSignals();
 
             //last element is a zero, should not generate a signal
             retset = new List<double> { 0, 0, 0, 0 };
-            MACD.CheckForCrossOver(retset, "TEST");
+            MACD.CheckForCrossOver(retset, "TEST", DomainObjects.Periods.ThirtyMinutesThirtyDays);
             Assert.IsFalse(SellSignal);
             Assert.IsFalse(BuySignal);
             ResetSignals();
 
             //last element is a positive, pass zeros, to a negative, this is a buy
             retset = new List<double> { -1, 0, 0, 1 };
-            MACD.CheckForCrossOver(retset, "TEST");
+            MACD.CheckForCrossOver(retset, "TEST", DomainObjects.Periods.ThirtyMinutesThirtyDays);
             Assert.IsTrue(BuySignal);
             Assert.IsFalse(SellSignal);
             ResetSignals();
 
             //last element is a negative, pass zeros, to a negative, this not a signal
             retset = new List<double> { -1, -1, 0, -1 };
-            MACD.CheckForCrossOver(retset, "TEST");
+            MACD.CheckForCrossOver(retset, "TEST", DomainObjects.Periods.ThirtyMinutesThirtyDays);
             Assert.IsFalse(BuySignal);
             Assert.IsFalse(SellSignal);
             ResetSignals();
 
             //last element is a negative, pass zeros, this is not a signal
             retset = new List<double> { 0, 0, 0, -1 };
-            MACD.CheckForCrossOver(retset, "TEST");
+            MACD.CheckForCrossOver(retset, "TEST", DomainObjects.Periods.ThirtyMinutesThirtyDays);
             Assert.IsFalse(BuySignal);
             Assert.IsFalse(SellSignal);
             ResetSignals();
 
             //last element is a negative, pass zeros, to a positive, this a sell
             retset = new List<double> { -1, 2, 0, -1 };
-            MACD.CheckForCrossOver(retset, "TEST");
+            MACD.CheckForCrossOver(retset, "TEST", DomainObjects.Periods.ThirtyMinutesThirtyDays);
             Assert.IsFalse(BuySignal);
             Assert.IsTrue(SellSignal);
             ResetSignals();
 
             //last element is a negative, next is a positive, this is a sell
             retset = new List<double> { 3, -1 };
-            MACD.CheckForCrossOver(retset, "TEST");
+            MACD.CheckForCrossOver(retset, "TEST", DomainObjects.Periods.ThirtyMinutesThirtyDays);
             Assert.IsFalse(BuySignal);
             Assert.IsTrue(SellSignal);
             ResetSignals();
 
             //last element is a positive, next is a negative, this is a buy
             retset = new List<double> { -3, 1 };
-            MACD.CheckForCrossOver(retset, "TEST");
+            MACD.CheckForCrossOver(retset, "TEST", DomainObjects.Periods.ThirtyMinutesThirtyDays);
             Assert.IsTrue(BuySignal);
             Assert.IsFalse(SellSignal);
             ResetSignals();

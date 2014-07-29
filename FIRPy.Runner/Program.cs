@@ -6,6 +6,7 @@ using System.Text;
 using FIRPy.FeedAPI;
 using FIRPy.DomainObjects;
 using FIRPy.Indicators;
+using FIRPy.Notifications;
 
 namespace FIRPy.Runner
 {
@@ -18,14 +19,19 @@ namespace FIRPy.Runner
         
         static void Main(string[] args)
         {
+            Intraday();   
+        }
+
+        static void Intraday()
+        {
             Stopwatch stopwatch = new Stopwatch();
             ConfigSettings settings = new ConfigSettings();
             settings.SQLiteDatabaseLocation = @"..\..\..\..\sqlite-databases\penny.sqlite";
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(lotsSymbols, 121, 30, GooglePoints);            
-            //var ticks = googleFeed.GetSavedTicks(settings, "ticks");
+            //var ticks = googleFeed.GetTicks(symbols, 121, 30, GooglePoints);
+            var ticks = googleFeed.GetSavedTicks(settings, "ticks");
 
             RelativeStrengthIndex.RSIGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIGreaterThan70);
             RelativeStrengthIndex.RSILessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSILessThan30);
@@ -35,9 +41,7 @@ namespace FIRPy.Runner
 
             foreach (var t in ticks)
             {
-                //THIS IS ONLY TWO MINUTE PERIODS
-
-                var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderBy(x=>x.Date);
+                var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderBy(x => x.Date);
 
                 if (currentDayData.Count() <= 0)
                     continue;
@@ -58,14 +62,17 @@ namespace FIRPy.Runner
                     OpenPrice = openPrice
                 });
 
-                RelativeStrengthIndex.GetRSI(10, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList(), t.Symbol, "5D");
-                MACD.GetMACDInfo(12, 26, 9, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList(), 5, t.Symbol);
+                RelativeStrengthIndex.GetRSI(10, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList(), t.Symbol, Periods.TwoMinutesFiveDays);
+                RelativeStrengthIndex.GetRSI(10, t.TickGroup30Minutes1Month.Select(x => x.Close).ToList(), t.Symbol, Periods.ThirtyMinutesThirtyDays);
+                MACD.GetMACDInfo(12, 26, 9, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList(), 5, t.Symbol, Periods.TwoMinutesFiveDays);
+                MACD.GetMACDInfo(12, 26, 9, t.TickGroup30Minutes1Month.Select(x => x.Close).ToList(), 5, t.Symbol, Periods.ThirtyMinutesThirtyDays);
             }
 
-            //googleFeed.SaveTicks(ticks, settings, "ticks");         
+            //googleFeed.SaveTicks(ticks, settings, "ticks"); 
+
             Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
 
-            var hot = notificationsList.Values.Where(x => x.RSIBuySell != null && x.MACDBuySell != null);
+            Notification.SendTickReportData(notificationsList, Delivery.Email);
 
             stopwatch.Stop();
             Console.ReadLine();
@@ -73,34 +80,72 @@ namespace FIRPy.Runner
 
         #region Indicator Events
         static void MACD_MACDSellSignal(object sender, MACDEventArgs e)
-        {            
-            notificationsList[e.Symbol].MACDBuySell = "SELL";
-            notificationsList[e.Symbol].MACDHistogram = e.Histogram;
+        {
+            switch (e.Period)
+            {
+                case(Periods.ThirtyMinutesThirtyDays):
+                    notificationsList[e.Symbol].MACD30DBuySell = "SELL";
+                    notificationsList[e.Symbol].MACD30DHistogram = e.Histogram;
+                    break;
+                case(Periods.TwoMinutesFiveDays):
+                    notificationsList[e.Symbol].MACD5DBuySell = "SELL";
+                    notificationsList[e.Symbol].MACD5DHistogram = e.Histogram;
+                    break;
+            }
         }
 
         static void MACD_MACDBuySignal(object sender, MACDEventArgs e)
         {
-            notificationsList[e.Symbol].MACDBuySell = "BUY";
-            notificationsList[e.Symbol].MACDHistogram = e.Histogram;
+            switch (e.Period)
+            {
+                case (Periods.ThirtyMinutesThirtyDays):
+                    notificationsList[e.Symbol].MACD30DBuySell = "BUY";
+                    notificationsList[e.Symbol].MACD30DHistogram = e.Histogram;
+                    break;
+                case (Periods.TwoMinutesFiveDays):
+                    notificationsList[e.Symbol].MACD5DBuySell = "BUY";
+                    notificationsList[e.Symbol].MACD5DHistogram = e.Histogram;
+                    break;
+            }
         }
 
         static void RelativeStrengthIndex_RSILessThan30(object sender, RelativeStrengthIndexEventArgs e)
         {
-            //Console.WriteLine("BUY {0} {1} RSI: {2}", e.Symbol, e.Period, e.RSI );            
-            //notificationsList[e.Symbol].RSIBuySell = "BUY";
-            notificationsList[e.Symbol].RSI = e.RSI;
+            switch (e.Period)
+            {
+                case (Periods.ThirtyMinutesThirtyDays):
+                    notificationsList[e.Symbol].RSI30D = e.RSI;
+                    break;
+                case (Periods.TwoMinutesFiveDays):
+                    notificationsList[e.Symbol].RSI5D = e.RSI;
+                    break;
+            }
         }
 
         static void RelativeStrengthIndex_RSIGreaterThan70(object sender, RelativeStrengthIndexEventArgs e)
         {
-            //Console.WriteLine("SELL {0} {1} RSI: {2}", e.Symbol, e.Period, e.RSI);            
-            //notificationsList[e.Symbol].RSIBuySell = "SELL";
-            notificationsList[e.Symbol].RSI = e.RSI;
+            switch (e.Period)
+            {
+                case (Periods.ThirtyMinutesThirtyDays):
+                    notificationsList[e.Symbol].RSI30D = e.RSI;
+                    break;
+                case (Periods.TwoMinutesFiveDays):
+                    notificationsList[e.Symbol].RSI5D = e.RSI;
+                    break;
+            }
         }
 
         static void RelativeStrengthIndex_RSIFlat(object sender, RelativeStrengthIndexEventArgs e)
         {
-            notificationsList[e.Symbol].RSI = e.RSI;
+            switch (e.Period)
+            {
+                case (Periods.ThirtyMinutesThirtyDays):
+                    notificationsList[e.Symbol].RSI30D = e.RSI;
+                    break;
+                case (Periods.TwoMinutesFiveDays):
+                    notificationsList[e.Symbol].RSI5D = e.RSI;
+                    break;
+            }
         }
         #endregion
     }

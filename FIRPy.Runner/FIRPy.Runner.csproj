@@ -60,6 +60,10 @@
       <Project>{294C18CA-844C-4681-8407-43EF14C499C2}</Project>
       <Name>FIRPy.Indicators</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FIRPy.Notifications\FIRPy.Notifications.csproj">
+      <Project>{A54D1B11-C2FC-4018-BCBA-82C99E7E9413}</Project>
+      <Name>FIRPy.Notifications</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

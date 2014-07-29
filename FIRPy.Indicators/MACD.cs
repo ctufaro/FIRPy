@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FIRPy.DomainObjects;
 using TicTacTec.TA.Library;
 
 namespace FIRPy.Indicators
@@ -11,37 +12,6 @@ namespace FIRPy.Indicators
         public delegate void MACDHandler(object sender, MACDEventArgs e);
         public static event MACDHandler MACDBuySignal;
         public static event MACDHandler MACDSellSignal;
-
-        public static List<double> initMACD(int window, List<double> data)
-        {
-            int startIdx = 0;
-            int endIdx = data.Count - 1;
-            int optInFastPeriod = 12;
-            int optInSlowPeriod = 26;
-            int optInSignalPeriod = 9;
-            double[] inReal = data.ToArray();
-
-            int outBegIdx;
-            int outNBElement;
-
-            double[] outMACD = new double[endIdx - startIdx + 1];
-            double[] outMACDSignal = new double[endIdx - startIdx + 1];
-            double[] outMACDHist = new double[endIdx - startIdx + 1];
-
-            Core.RetCode res = Core.Macd(startIdx, endIdx, inReal, optInFastPeriod, optInSlowPeriod, optInSignalPeriod, out  outBegIdx, out  outNBElement, outMACD, outMACDSignal, outMACDHist);
-            return outMACDHist.ToList();
-        }
-
-        public static List<double> GetMACDArray(int window, List<double> data)
-        {
-            return initMACD(window, data);
-        }
-
-        public static double GetMACD(int window, List<double> data, string id, string period)
-        {
-            MACDEventArgs e = new MACDEventArgs();            
-            return 0;
-        }
 
         private static List<double> CalculateXDayEMA(int period, List<double> data, int decimalPlaces)
         {
@@ -71,7 +41,7 @@ namespace FIRPy.Indicators
             return retList;
         }
 
-        public static Tuple<List<double>, List<double>, List<double>> GetMACDInfo(int shortEMA, int longEMA, int signalLine, List<double> data, int decimalPlaces, string symbol)
+        public static Tuple<List<double>, List<double>, List<double>> GetMACDInfo(int shortEMA, int longEMA, int signalLine, List<double> data, int decimalPlaces, string symbol, Periods period)
         {
             var TwelveDayEMA = CalculateXDayEMA(shortEMA, data, decimalPlaces);
             var TwentySixDayEMA = CalculateXDayEMA(longEMA, data, decimalPlaces);
@@ -79,17 +49,20 @@ namespace FIRPy.Indicators
             var Signal = CalculateXDayEMA(signalLine, MACD, decimalPlaces);
             var Histogram = SubtractLists(MACD, Signal, decimalPlaces);
 
-            CheckForCrossOver(Histogram, symbol);
+            CheckForCrossOver(Histogram, symbol, period);
 
             return new Tuple<List<double>, List<double>, List<double>>(MACD.Skip(signalLine-1).ToList(), Signal, Histogram);
         }
 
-        public static void CheckForCrossOver(List<double> histogram, string symbol)
+        public static void CheckForCrossOver(List<double> histogram, string symbol, Periods period)
         {
             int lastSign = Math.Sign(histogram.Last());
-            MACDEventArgs e = new MACDEventArgs();
-            e.Symbol = symbol;
-            e.Histogram = histogram.Last();
+            MACDEventArgs e = new MACDEventArgs
+            {
+                Histogram = histogram.Last(),
+                Period = period,
+                Symbol = symbol
+            };
             if (lastSign != 0)
             {
                 //reversing histogram
@@ -121,7 +94,7 @@ namespace FIRPy.Indicators
 
     public class MACDEventArgs : System.EventArgs
     {
-        public string Period { get; set; }
+        public Periods Period { get; set; }
         public string Symbol { get; set; }
         public double Histogram { get; set; }
     }

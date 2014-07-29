@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FIRPy.DomainObjects;
 using TicTacTec.TA.Library;
 
 namespace FIRPy.Indicators
@@ -35,7 +36,7 @@ namespace FIRPy.Indicators
             return initRSI(window, data);
         }
 
-        public static double GetRSI(int window, List<double> data, string id, string period)
+        public static double GetRSI(int window, List<double> data, string id, Periods period)
         {
             double retval = initRSI(window, data).Last();
             RelativeStrengthIndexEventArgs e = new RelativeStrengthIndexEventArgs();
@@ -70,7 +71,7 @@ namespace FIRPy.Indicators
 
     public class RelativeStrengthIndexEventArgs : System.EventArgs
     {
-        public string Period { get; set; }
+        public Periods Period { get; set; }
         public string Symbol { get; set; }
         public double RSI { get; set; }
     }

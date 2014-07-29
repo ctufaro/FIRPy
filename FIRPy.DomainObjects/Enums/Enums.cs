@@ -24,4 +24,16 @@ namespace FIRPy.DomainObjects
     {
         Penny, SP500, ETFs
     }
+
+    public enum Periods
+    {
+        TwoMinutesFiveDays,
+        ThirtyMinutesThirtyDays
+    }
+
+    public enum Delivery
+    {
+        Email,
+        SMS
+    }
 }
