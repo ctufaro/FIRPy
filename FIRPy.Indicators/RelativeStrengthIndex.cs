@@ -9,8 +9,9 @@ namespace FIRPy.Indicators
     public static class RelativeStrengthIndex
     {
         public delegate void RSIHandler(object sender, RelativeStrengthIndexEventArgs e);
-        public static event RSIHandler RSIEqualToOrGreaterThan70;
-        public static event RSIHandler RSIEqualToOrLessThan30;        
+        public static event RSIHandler RSIGreaterThan70;
+        public static event RSIHandler RSILessThan30;
+        public static event RSIHandler RSIFlat;  
         
         private static List<double> initRSI(int window, List<double> data)
         {
@@ -41,18 +42,25 @@ namespace FIRPy.Indicators
             e.Symbol = id;
             e.RSI = retval;
             e.Period = period;
-            if (retval <= 30 && retval > 0)
+            if (retval < 30 && retval >= 0)
             {
-                if (RSIEqualToOrLessThan30 != null)
-                {           
-                    RSIEqualToOrLessThan30(null, e);
+                if (RSILessThan30 != null)
+                {
+                    RSILessThan30(null, e);
                 }
             }
-            else if (retval >= 70 && retval < 100)
+            else if (retval > 70 && retval < 100)
             {
-                if (RSIEqualToOrGreaterThan70 != null)
+                if (RSIGreaterThan70 != null)
                 {                    
-                   RSIEqualToOrGreaterThan70(null, e);
+                   RSIGreaterThan70(null, e);
+                }
+            }
+            else if (retval >= 30 && retval <= 70)
+            {
+                if (RSIFlat != null)
+                {
+                    RSIFlat(null, e);
                 }
             }
             return retval;
