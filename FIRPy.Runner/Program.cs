@@ -34,7 +34,9 @@ namespace FIRPy.Runner
             MACD.MACDSellSignal += new MACD.MACDHandler(MACD_MACDSellSignal);
 
             foreach (var t in ticks)
-            {              
+            {
+                //THIS IS ONLY TWO MINUTE PERIODS
+
                 var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderBy(x=>x.Date);
 
                 if (currentDayData.Count() <= 0)
@@ -85,20 +87,20 @@ namespace FIRPy.Runner
         static void RelativeStrengthIndex_RSILessThan30(object sender, RelativeStrengthIndexEventArgs e)
         {
             //Console.WriteLine("BUY {0} {1} RSI: {2}", e.Symbol, e.Period, e.RSI );            
-            notificationsList[e.Symbol].RSIBuySell = "BUY";
+            //notificationsList[e.Symbol].RSIBuySell = "BUY";
             notificationsList[e.Symbol].RSI = e.RSI;
         }
 
         static void RelativeStrengthIndex_RSIGreaterThan70(object sender, RelativeStrengthIndexEventArgs e)
         {
             //Console.WriteLine("SELL {0} {1} RSI: {2}", e.Symbol, e.Period, e.RSI);            
-            notificationsList[e.Symbol].RSIBuySell = "SELL";
+            //notificationsList[e.Symbol].RSIBuySell = "SELL";
             notificationsList[e.Symbol].RSI = e.RSI;
         }
 
         static void RelativeStrengthIndex_RSIFlat(object sender, RelativeStrengthIndexEventArgs e)
         {
-            //
+            notificationsList[e.Symbol].RSI = e.RSI;
         }
         #endregion
     }
