@@ -158,13 +158,12 @@ namespace FIRPy.FeedAPI
             {
                 var requestUrl = string.Format(url, symbol, startDate.ToShortDateString(), endDate.ToShortDateString());
                 string[] retArray = GetRequestURL(requestUrl);
-              
-                foreach (var element in retArray.Where(x=>x.Length>1).Take(3))
-                {
-                    string[] split = element.Split(new string[] { "," }, StringSplitOptions.None);
-                    if (split[0].Equals("Date")) { continue; }
-                    retList.Add(new Tuple<string, DateTime, int>(symbol, DateTime.Parse(split[0]), Int32.Parse(split[5])));
-                }
+
+                var elements = retArray.Where(x => x.Length > 1).Skip(1).Take(2).ToList();
+                string[] dayOne = elements[0].Split(new string[] { "," }, StringSplitOptions.None);
+                string[] dayTwo = elements[1].Split(new string[] { "," }, StringSplitOptions.None);
+                retList.Add(new Tuple<string, DateTime, int>(symbol, DateTime.Parse(dayOne[0]), Int32.Parse(dayOne[5])));
+                retList.Add(new Tuple<string, DateTime, int>(symbol, DateTime.Parse(dayTwo[0]), Int32.Parse(dayTwo[5])));
             }
             return retList;
         }
