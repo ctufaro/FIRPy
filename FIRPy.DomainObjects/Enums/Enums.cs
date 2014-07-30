@@ -34,6 +34,7 @@ namespace FIRPy.DomainObjects
     public enum Delivery
     {
         Email,
-        SMS
+        SMS,
+        FileServer
     }
 }
