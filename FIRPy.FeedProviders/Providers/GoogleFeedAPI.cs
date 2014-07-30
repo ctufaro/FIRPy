@@ -149,5 +149,24 @@ namespace FIRPy.FeedAPI
             dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dtDateTime;
         }
+
+        public override List<Tuple<string, DateTime, int>> GetVolume(string[] symbols, DateTime startDate, DateTime endDate)
+        {
+            List<Tuple<string, DateTime, int>> retList = new List<Tuple<string, DateTime, int>>();          
+            string url = "http://www.google.com/finance/historical?q={0}&startdate={1}&enddate={2}&output=csv";
+            foreach (string symbol in symbols)
+            {
+                var requestUrl = string.Format(url, symbol, startDate.ToShortDateString(), endDate.ToShortDateString());
+                string[] retArray = GetRequestURL(requestUrl);
+              
+                foreach (var element in retArray.Where(x=>x.Length>1).Take(3))
+                {
+                    string[] split = element.Split(new string[] { "," }, StringSplitOptions.None);
+                    if (split[0].Equals("Date")) { continue; }
+                    retList.Add(new Tuple<string, DateTime, int>(symbol, DateTime.Parse(split[0]), Int32.Parse(split[5])));
+                }
+            }
+            return retList;
+        }
     }
 }

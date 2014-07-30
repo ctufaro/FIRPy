@@ -5,7 +5,8 @@ using System.Text;
 
 namespace FIRPy.Indicators
 {
-    class Volume
+    public class Volume
     {
+       
     }
 }

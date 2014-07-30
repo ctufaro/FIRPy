@@ -25,5 +25,14 @@ namespace FIRPy.UnitTests
         {
             
         }
+
+        [TestMethod]
+        public void Get_Symbols_Volume_Test()
+        {
+            string[] symbols = new string[] { "GEIG", "VGPR" };
+            FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
+            var volume = googleFeed.GetVolume(symbols, DateTime.Parse("07/29/2014"), DateTime.Parse("07/30/2014"));
+            Assert.IsTrue(true);
+        }
     }
 }
