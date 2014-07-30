@@ -12,7 +12,7 @@ namespace FIRPy.Runner
 {
     class Program
     {
-        private static string[] symbols = new string[] { "GEIG", "PMCM", "VGPR" };
+        private static string[] symbols = new string[] { "GEIG","PMCM","VGPR","ITEN" };
         private static string[] lotsSymbols = new string[] { "AEGA", "AEMD", "AGIN", "AHFD", "ALKM", "AMZZ", "ANYI", "APHD", "APPZ", "ASKE", "AWGI", "BCLI", "BFRE", "BKCT", "BLBK", "BLUU", "BMIX", "BRZG", "CANA", "CANN", "CANV", "CAPP", "CBDS", "CBIS", "CNAB", "CNRFF", "COCP", "COSR", "CRMB", "CTSO", "CYNK", "DDDX", "DLPM", "DMHI", "DPSM", "ECIG", "ECPN", "EDXC", "EHOS", "ELTP", "EMBR", "ENCR", "ENIP", "ERBB", "EXSL", "FARE", "FITX", "FMCC", "FMCKJ", "FNMA", "FNMAH", "FNMAS", "FNMAT", "FSPM", "FTTN", "GBLX", "GEIG", "GFOO", "GFOX", "GHDC", "GMUI", "GNIN", "GRNH", "GSPE", "GTHP", "GWPRF", "HEMP", "HFCO", "HIPP", "HJOE", "HKTU", "HKUP", "HORI", "HSCC", "IDNG", "IDOI", "IDST", "INIS", "INNO", "IPRU", "IRCE", "ITEN", "IWEB", "KDUS", "KEOSF", "KRED", "LIBE", "LIWA", "LQMT", "LVGI", "MAXD", "MCIG", "MDBX", "MDDD", "MDMJ", "MINA", "MJMJ", "MJNA", "MLCG", "MNTR", "MONK", "MRIC", "MWIP", "MYHI", "MYRY", "MZEI", "NHLD", "NHTC", "NMED", "NPWZ", "NSATF", "NVIV", "NVLX", "OBJE", "OCEE", "OREO", "OWOO", "PARR", "PHOT", "PMCM", "PROP", "PTRC", "PUGE", "PWDY", "PWEB", "RBCC", "RCHA", "RDMP", "REAC", "RFMK", "RIGH", "RJDG", "ROIL", "SANP", "SBDG", "SCIO", "SCRC", "SFMI", "SIAF", "SIMH", "SING", "SLNN", "SNGX", "SRNA", "SVAD", "SWVI", "TRIIE", "TRTC", "TTNP", "UAPC", "UPOT", "VAPE", "VAPO", "VASO", "VEND", "VGPR", "VNTH", "VPOR", "VSYM", "VUZI", "WHLM", "WTER" };
         private static string[] GooglePoints = new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume };
         private static Dictionary<string, TickReportData> notificationsList = new Dictionary<string, TickReportData>();
@@ -30,8 +30,8 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            //var ticks = googleFeed.GetTicks(symbols, 121, 30, GooglePoints);
-            var ticks = googleFeed.GetSavedTicks(settings, "ticks");
+            var ticks = googleFeed.GetTicks(symbols, 121, 30, GooglePoints);
+            //var ticks = googleFeed.GetSavedTicks(settings, "ticks");
 
             RelativeStrengthIndex.RSIGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIGreaterThan70);
             RelativeStrengthIndex.RSILessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSILessThan30);
@@ -41,14 +41,14 @@ namespace FIRPy.Runner
 
             foreach (var t in ticks)
             {
-                var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.AddDays(-1).ToShortDateString())).OrderBy(x => x.Date);
+                var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderBy(x => x.Date);
 
                 if (currentDayData.Count() <= 0)
                     continue;
 
                 var currentVolume = currentDayData.Sum(v => v.Volume);
                 var symbol = t.Symbol;
-                var openPrice = currentDayData.First().Open;
+                var openPrice = currentDayData.First().Close;
                 var currentPrice = currentDayData.Last().Close;
                 var changeInPrice = (currentPrice - openPrice);
                 var changePercent = (changeInPrice / openPrice) * 100;
@@ -56,16 +56,25 @@ namespace FIRPy.Runner
                 notificationsList.Add(symbol, new TickReportData()
                 {
                     Symbol = symbol,
-                    ChangeInPrice = changeInPrice,
+                    ChangeInPrice = Math.Round(changePercent,2),
                     CurrentPrice = currentPrice,
                     CurrentVolume = currentVolume,
                     OpenPrice = openPrice
                 });
 
-                RelativeStrengthIndex.GetRSI(10, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList(), t.Symbol, Periods.TwoMinutesFiveDays);
-                RelativeStrengthIndex.GetRSI(10, t.TickGroup30Minutes1Month.Select(x => x.Close).ToList(), t.Symbol, Periods.ThirtyMinutesThirtyDays);
-                MACD.GetMACDInfo(12, 26, 9, t.TickGroup2Minutes5Days.Select(x => x.Close).ToList(), 5, t.Symbol, Periods.TwoMinutesFiveDays);
-                MACD.GetMACDInfo(12, 26, 9, t.TickGroup30Minutes1Month.Select(x => x.Close).ToList(), 5, t.Symbol, Periods.ThirtyMinutesThirtyDays);
+                var twoMinutesFiveDaysClosePrices = t.TickGroup2Minutes5Days.Select(x => x.Close).ToList();
+                if (twoMinutesFiveDaysClosePrices.Count() > 0)
+                {
+                    RelativeStrengthIndex.GetRSI(10, twoMinutesFiveDaysClosePrices, t.Symbol, Periods.TwoMinutesFiveDays);
+                    MACD.GetMACDInfo(12, 26, 9, twoMinutesFiveDaysClosePrices, 5, t.Symbol, Periods.TwoMinutesFiveDays);
+                }
+
+                var thirtyMinutesThirtyDays = t.TickGroup30Minutes1Month.Select(x => x.Close).ToList();
+                if (thirtyMinutesThirtyDays.Count() > 0)
+                {
+                    RelativeStrengthIndex.GetRSI(10, thirtyMinutesThirtyDays, t.Symbol, Periods.ThirtyMinutesThirtyDays);
+                    MACD.GetMACDInfo(12, 26, 9, thirtyMinutesThirtyDays, 5, t.Symbol, Periods.ThirtyMinutesThirtyDays);
+                }
             }
 
             //googleFeed.SaveTicks(ticks, settings, "ticks"); 

@@ -41,7 +41,7 @@ namespace FIRPy.Indicators
             double retval = initRSI(window, data).Last();
             RelativeStrengthIndexEventArgs e = new RelativeStrengthIndexEventArgs();
             e.Symbol = id;
-            e.RSI = retval;
+            e.RSI = Math.Round(retval,0);
             e.Period = period;
             if (retval < 30 && retval >= 0)
             {
@@ -61,6 +61,7 @@ namespace FIRPy.Indicators
             {
                 if (RSIFlat != null)
                 {
+                    e.RSI = -1;
                     RSIFlat(null, e);
                 }
             }
