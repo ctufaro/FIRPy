@@ -34,12 +34,12 @@ namespace FIRPy.Notifications
                             style = "color:green;font-weight:bold;";
                             break;
                     }
-                    var change = "<span style='"+style+"'>"+tickData.ChangeInPrice+"</span>";
+                    var change = "<span style='"+style+"'>"+tickData.ChangeInPrice+"%</span>";
 
                     var rsi5 = (tickData.RSI5D == -1) ? "-" : tickData.RSI5D.ToString();
                     var rsi30 = (tickData.RSI30D == -1) ? "-" : tickData.RSI30D.ToString();
 
-                    sb.Append(string.Format(tableFormat, tickData.Symbol, tickData.OpenPrice, tickData.CurrentVolume, tickData.CurrentPrice, change, rsi5, rsi30, tickData.MACD5DHistogram, tickData.MACD5DBuySell, tickData.MACD30DHistogram, tickData.MACD30DBuySell));
+                    sb.Append(string.Format(tableFormat, tickData.Symbol, tickData.OpenPrice, tickData.CurrentVolume.ToString("#,##0"), tickData.CurrentPrice, change, rsi5, rsi30, tickData.MACD5DHistogram, tickData.MACD5DBuySell, tickData.MACD30DHistogram, tickData.MACD30DBuySell));
                 }
                 html = html.Replace("<!--data-->", sb.ToString());
             }
