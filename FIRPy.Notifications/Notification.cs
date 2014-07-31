@@ -46,7 +46,28 @@ namespace FIRPy.Notifications
 
             if (deliveryMethod.Equals(Delivery.FileServer))
             {
-                File.WriteAllText(@"C:\temp\output.html",html);
+                File.WriteAllText(@"C:\temp\intraday.html",html);
+            }
+        }
+
+        public static void SendMorningVolumeData(List<Volume> data, Delivery deliveryMethod)
+        {
+            //get the html template
+            string html = string.Empty;
+            using (StreamReader sr = new StreamReader(@"../../../FIRPy.Notifications/HTMLTemplates/MorningVolume.htm"))
+            {
+                html = sr.ReadToEnd();
+                StringBuilder sb = new StringBuilder();
+                string tableFormat = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>";
+                foreach (var v in data.OrderBy(cv => cv.CurrentVolume).ThenBy(d => d.Difference))
+                {
+                    sb.Append(string.Format(tableFormat, v.Date.ToShortDateString(), v.Symbol, v.CurrentVolume, v.Difference, v.Close ));
+                }
+                html = html.Replace("<!--data-->", sb.ToString());
+            }
+            if (deliveryMethod.Equals(Delivery.FileServer))
+            {
+                File.WriteAllText(@"C:\temp\volu me.html", html);
             }
         }
     }
