@@ -15,7 +15,7 @@ namespace FIRPy.FeedAPI
         public abstract List<Ticks> GetSavedTicks(ConfigSettings settings, string tableName);
         public abstract void SaveTicks(List<Ticks> ticks, ConfigSettings settings, string tableName);
         public abstract List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate);
-        public abstract List<Tuple<string, DateTime, int>> GetVolume(string[] symbols, DateTime startDate, DateTime endDate);
+        public abstract List<Volume> GetVolume(string[] symbols, DateTime startDate, DateTime endDate);
         public string[] GetRequestURL(string url)
         {
             string result = string.Empty;
