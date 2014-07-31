@@ -28,7 +28,7 @@ namespace FIRPy.Runner
         static void MorningVolume()
         {
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
-            var volume = googleFeed.GetVolume(symbols, DateTime.Parse("07/29/201"), DateTime.Parse("07/03/2014"));
+            var volume = googleFeed.GetVolume(symbols, DateTime.Parse("07/29/2014"), DateTime.Parse("07/30/2014"));
             Notification.SendMorningVolumeData(volume, Delivery.FileServer);
 
         }

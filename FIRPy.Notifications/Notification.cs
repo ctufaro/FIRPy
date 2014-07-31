@@ -67,7 +67,7 @@ namespace FIRPy.Notifications
             }
             if (deliveryMethod.Equals(Delivery.FileServer))
             {
-                File.WriteAllText(@"C:\temp\volu me.html", html);
+                File.WriteAllText(@"C:\temp\volume.html", html);
             }
         }
     }
