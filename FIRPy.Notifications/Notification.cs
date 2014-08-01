@@ -35,6 +35,10 @@ namespace FIRPy.Notifications
             {
                 File.WriteAllText(@"C:\temp\intraday.html",html);
             }
+            else if (deliveryMethod.Equals(Delivery.Email))
+            {
+                Emailer.SendEmail("Test FIRPy 2.0", html);
+            }
         }
 
         public static string ChangeInText(double price)
@@ -77,6 +81,10 @@ namespace FIRPy.Notifications
             {
                 File.WriteAllText(@"C:\temp\volume.html", html);
             }
+            else if (deliveryMethod.Equals(Delivery.Email))
+            {
+                Emailer.SendEmail("Test FIRPy 2.0", html);
+            }
         }
 
         private static string GetStyleSheet()
@@ -88,5 +96,7 @@ namespace FIRPy.Notifications
             }
             return css;
         }
+
+
     }
 }

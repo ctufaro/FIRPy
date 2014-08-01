@@ -100,7 +100,7 @@ namespace FIRPy.Runner
 
             Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
 
-            Notification.SendTickReportData(notificationsList, Delivery.FileServer);
+            Notification.SendTickReportData(notificationsList, Delivery.Email);
 
             stopwatch.Stop();
             Console.ReadLine();

@@ -121,6 +121,9 @@ namespace FIRPy.FeedAPI
 
         private Ticks ParseLineIntoTick(string symbol, string[] webLines)
         {
+            if (webLines == null)
+                webLines = new string[]{""};
+            
             Ticks quote = new Ticks();
             quote.Symbol = symbol;
             foreach (string line in webLines)
