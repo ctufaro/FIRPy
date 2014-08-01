@@ -21,8 +21,8 @@ namespace FIRPy.Runner
 
         static void Main(string[] args)
         {
-            //Intraday();
-            MorningVolume();
+            Intraday();
+            //MorningVolume();
         }
 
         static void MorningVolume()
@@ -30,7 +30,6 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             var volume = googleFeed.GetVolume(symbols, DateTime.Parse("07/29/2014"), DateTime.Parse("07/30/2014"));
             Notification.SendMorningVolumeData(volume, Delivery.FileServer);
-
         }
 
         static void TwitterRSSFeeds()
@@ -45,7 +44,7 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(symbols, 61, 30, GooglePoints);
+            var ticks = googleFeed.GetTicks(googleFeed.GetSymbolsFromList(Lists.Penny), 61, 30, GooglePoints);
             //var ticks = googleFeed.GetSavedTicks(settings, "ticks");
 
             RelativeStrengthIndex.RSIGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIGreaterThan70);
