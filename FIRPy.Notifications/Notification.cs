@@ -42,6 +42,7 @@ namespace FIRPy.Notifications
                     sb.Append(string.Format(tableFormat, tickData.Symbol, tickData.OpenPrice, tickData.CurrentVolume.ToString("#,##0"), tickData.CurrentPrice, change, rsi5, rsi30, tickData.MACD5DHistogram, tickData.MACD5DBuySell, tickData.MACD30DHistogram, tickData.MACD30DBuySell));
                 }
                 html = html.Replace("<!--data-->", sb.ToString());
+                html = html.Replace("<!--css-->", GetStyleSheet());
             }
 
             if (deliveryMethod.Equals(Delivery.FileServer))
@@ -64,11 +65,22 @@ namespace FIRPy.Notifications
                     sb.Append(string.Format(tableFormat, v.Date.ToShortDateString(), v.Symbol, v.CurrentVolume, v.Difference, v.Close ));
                 }
                 html = html.Replace("<!--data-->", sb.ToString());
+                html = html.Replace("<!--css-->", GetStyleSheet());
             }
             if (deliveryMethod.Equals(Delivery.FileServer))
             {
                 File.WriteAllText(@"C:\temp\volume.html", html);
             }
+        }
+
+        private static string GetStyleSheet()
+        {
+            string css = string.Empty;
+            using (StreamReader sr = new StreamReader(@"../../../FIRPy.Notifications/CSS/style.css"))
+            {
+                css = sr.ReadToEnd();
+            }
+            return css;
         }
     }
 }
