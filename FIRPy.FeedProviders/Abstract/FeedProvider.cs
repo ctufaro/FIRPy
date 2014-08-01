@@ -22,7 +22,11 @@ namespace FIRPy.FeedAPI
             using (var client = new WebClient())
             {
                 client.Proxy = null;
-                result = client.DownloadString(url);
+                try
+                {
+                    result = client.DownloadString(url);
+                }
+                catch (WebException e) { }
             }
 
             if (!string.IsNullOrEmpty(result))

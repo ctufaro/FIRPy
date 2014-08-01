@@ -154,13 +154,14 @@ namespace FIRPy.FeedAPI
         {
             //Google Historicals rounds to the nearent cent, not very helpful for penny stocks
             //We need to make a seperate call just for the closing prices
-            var closingPrices = GetTicks(symbols,30001,30, new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume });
+            var closingPrices = GetTicks(symbols,30001,3, new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume });
             var filterCP = (from cp in closingPrices
-                           select new
-                           {
+                            where cp.TickGroup.Count()>0
+                            select new
+                            {
                               Symbol = cp.Symbol,
                               Close = cp.TickGroup.Last().Close
-                           }).ToList();
+                            }).ToList();
 
             List<Volume> retList = new List<Volume>();          
             string url = "http://www.google.com/finance/historical?q={0}&startdate={1}&enddate={2}&output=csv";
@@ -170,21 +171,27 @@ namespace FIRPy.FeedAPI
                 
                 var requestUrl = string.Format(url, symbol, startDate.ToShortDateString(), endDate.ToShortDateString());
                 string[] retArray = GetRequestURL(requestUrl);
-                var elements = retArray.Where(x => x.Length > 1).Skip(1).Take(2).ToList();
-                string[] dayOne = elements[0].Split(new string[] { "," }, StringSplitOptions.None);
-                string[] dayTwo = elements[1].Split(new string[] { "," }, StringSplitOptions.None);
-
-                lock (myLock)
+                if (retArray != null)
                 {
-                    retList.Add(new Volume
+                    var elements = retArray.Where(x => x.Length > 1).Skip(1).Take(2).ToList();
+                    if (elements.Count() >= 2)
                     {
-                        Close = filterCP.Where(a => a.Symbol.Equals(symbol)).First().Close,
-                        CurrentVolume = Int32.Parse(dayOne[5]),
-                        Date = DateTime.Parse(dayOne[0]),
-                        Difference = Math.Round(((Double.Parse(dayOne[5]) - Double.Parse(dayTwo[5])) / Double.Parse(dayTwo[5])) * 100, 0),
-                        Symbol = symbol
+                        string[] dayOne = elements[0].Split(new string[] { "," }, StringSplitOptions.None);
+                        string[] dayTwo = elements[1].Split(new string[] { "," }, StringSplitOptions.None);
 
-                    });
+                        lock (myLock)
+                        {
+                            retList.Add(new Volume
+                            {
+                                Close = filterCP.Exists(a => a.Symbol.Equals(symbol)) ? filterCP.Where(a=>a.Symbol.Equals(symbol)).First().Close: 0,
+                                CurrentVolume = Int32.Parse(dayOne[5]),
+                                Date = DateTime.Parse(dayOne[0]),
+                                Difference = Math.Round(((Double.Parse(dayOne[5]) - Double.Parse(dayTwo[5])) / Double.Parse(dayTwo[5])) * 100, 0),
+                                Symbol = symbol
+
+                            });
+                        }
+                    }
                 }
             });
             return retList;
