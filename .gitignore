@@ -12,3 +12,4 @@ obj/
 *.vsmdi
 *.testsettings
 *.cachefile
+*.config
