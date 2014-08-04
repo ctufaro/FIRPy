@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.DomainObjects", "FIRPy.DomainObjects\FIRPy.DomainObjects.csproj", "{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.ReportEngine", "FIRPy.ReportEngine\FIRPy.ReportEngine.csproj", "{914ED228-A947-4017-B89C-73F2CFA022D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.ChartEngine", "FIRPy.ReportEngine\FIRPy.ChartEngine.csproj", "{914ED228-A947-4017-B89C-73F2CFA022D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Notifications", "FIRPy.Notifications\FIRPy.Notifications.csproj", "{A54D1B11-C2FC-4018-BCBA-82C99E7E9413}"
 EndProject
