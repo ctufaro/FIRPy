@@ -35,6 +35,7 @@ namespace FIRPy.DomainObjects
     {
         Email,
         SMS,
-        FileServer
+        FileServer,
+        FTP
     }
 }

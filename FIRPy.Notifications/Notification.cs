@@ -41,25 +41,6 @@ namespace FIRPy.Notifications
             }
         }
 
-        public static string ChangeInText(double price)
-        {
-            string style = "";
-            if (Double.IsNaN(price)) { price = 0; }
-            switch (Math.Sign(price))
-            {
-                case (-1):
-                    style = "color:red;font-weight:bold;";
-                    break;
-                case (0):
-                    style = "black";
-                    break;
-                case (1):
-                    style = "color:green;font-weight:bold;";
-                    break;
-            }
-            return "<span style='" + style + "'>" + price + "%</span>";
-        }
-
         public static void SendMorningVolumeData(List<Volume> data, Delivery deliveryMethod)
         {
             //get the html template
@@ -88,6 +69,25 @@ namespace FIRPy.Notifications
             }
         }
 
+        private static string ChangeInText(double price)
+        {
+            string style = "";
+            if (Double.IsNaN(price)) { price = 0; }
+            switch (Math.Sign(price))
+            {
+                case (-1):
+                    style = "color:red;font-weight:bold;";
+                    break;
+                case (0):
+                    style = "black";
+                    break;
+                case (1):
+                    style = "color:green;font-weight:bold;";
+                    break;
+            }
+            return "<span style='" + style + "'>" + price + "%</span>";
+        }
+
         private static string GetStyleSheet()
         {
             string css = string.Empty;
@@ -97,7 +97,6 @@ namespace FIRPy.Notifications
             }
             return css;
         }
-
 
     }
 }
