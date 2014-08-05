@@ -21,8 +21,9 @@ namespace FIRPy.Runner
 
         static void Main(string[] args)
         {
-            Intraday();
-            //MorningVolume();
+            //Intraday();
+            MorningVolume();
+            
         }
 
         static void MorningVolume()
@@ -31,8 +32,8 @@ namespace FIRPy.Runner
             Console.WriteLine("Calculating Volume");
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             stopwatch.Start();
-            var volume = googleFeed.GetVolume(googleFeed.GetSymbolsFromList(Lists.Penny), DateTime.Parse("07/30/2014"), DateTime.Parse("07/31/2014"));
-            Notification.SendMorningVolumeData(volume, Delivery.FileServer);
+            var volume = googleFeed.GetVolume(googleFeed.GetSymbolsFromList(Lists.Penny), DateTime.Parse("07/31/2014"), DateTime.Parse("08/01/2014"));
+            Notification.SendMorningVolumeData(volume, Delivery.Email);
             Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
             Console.ReadLine();
         }
@@ -49,7 +50,7 @@ namespace FIRPy.Runner
             FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             stopwatch.Start();
             Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(symbols, 61, 30, GooglePoints);
+            var ticks = googleFeed.GetTicks(googleFeed.GetSymbolsFromList(Lists.Penny), 61, 30, GooglePoints);
             //var ticks = googleFeed.GetSavedTicks(settings, "ticks");
 
             RelativeStrengthIndex.RSIGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIGreaterThan70);
@@ -96,11 +97,11 @@ namespace FIRPy.Runner
                 }
             }
 
-            googleFeed.SaveTicks(ticks, settings, "ticks"); 
+            //googleFeed.SaveTicks(ticks, settings, "ticks"); 
 
             Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
 
-            Notification.SendTickReportData(notificationsList, Delivery.Email);
+            Notification.SendTickReportData(notificationsList, Delivery.FileServer);
 
             stopwatch.Stop();
             Console.ReadLine();

@@ -11,13 +11,14 @@ namespace FIRPy.Notifications
 {
     public class Emailer
     {
-        public static void SendEmail(string subject, string body)
+        public static void SendEmail(string subject, string body, string attachment = "")
         {
            
             string gUser = ConfigurationSettings.AppSettings["GmailUser"];
             string gEmail = ConfigurationSettings.AppSettings["GmailEmail"];
             string gPassword = ConfigurationSettings.AppSettings["GmailPassword"];
 
+            MailMessage message = null;
             var fromAddress = new MailAddress(gEmail, gUser);
             var toAddress = new MailAddress(gEmail, gUser);
             string fromPassword = gPassword;
@@ -31,13 +32,17 @@ namespace FIRPy.Notifications
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
             };
-            using (var message = new MailMessage(fromAddress, toAddress)
+            using (message = new MailMessage(fromAddress, toAddress))
             {
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            })
-            {
+                
+                message.Subject = subject;
+                message.Body = body;
+                message.IsBodyHtml = true;
+                if (!string.IsNullOrEmpty(attachment))
+                {
+                    message.Attachments.Add(new Attachment(attachment));
+                }
+
                 smtp.Send(message);
             }
         }

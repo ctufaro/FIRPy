@@ -83,7 +83,8 @@ namespace FIRPy.Notifications
             }
             else if (deliveryMethod.Equals(Delivery.Email))
             {
-                Emailer.SendEmail("Test FIRPy 2.0", html);
+                File.WriteAllText(@"C:\temp\volume.html", html);
+                Emailer.SendEmail("Test FIRPy 2.0", "Message Attached", @"C:\temp\volume.html");
             }
         }
 
