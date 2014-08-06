@@ -23,20 +23,6 @@ namespace FIRPy.DomainObjects
                 }
             }
         }
-        public List<Tick> TickGroup30Minutes1Month
-        {
-            get
-            {
-                if (this.TickGroup != null)
-                {
-                    return this.TickGroup.Where(x => x.Date.Minute == 00 || x.Date.Minute == 30).OrderBy(x => x.Date).ToList();
-                }
-                else
-                {
-                    return null;
-                } 
-            }
-        }
 
         public Ticks()
         {

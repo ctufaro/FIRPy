@@ -7,7 +7,7 @@ namespace FIRPy.DomainObjects
 {
     public class Volume
     {
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
         public string Symbol { get; set; }
         public int CurrentVolume { get; set; }
         public double Difference { get; set; }

@@ -13,7 +13,7 @@ namespace FIRPy.Runner
     class Program
     {
         #region Private Variables
-        private static string[] symbols = new string[] { "AEGA", "AEMD", "AGIN", "AHFD", "ALKM" };
+        private static string[] symbols = new string[] { "GEIG", "DNAX", "VGPR", "VLNX" };
         private static string[] lotsSymbols = new string[] { "AEGA", "AEMD", "AGIN", "AHFD", "ALKM", "AMZZ", "ANYI", "APHD", "APPZ", "ASKE", "AWGI", "BCLI", "BFRE", "BKCT", "BLBK", "BLUU", "BMIX", "BRZG", "CANA", "CANN", "CANV", "CAPP", "CBDS", "CBIS", "CNAB", "CNRFF", "COCP", "COSR", "CRMB", "CTSO", "CYNK", "DDDX", "DLPM", "DMHI", "DPSM", "ECIG", "ECPN", "EDXC", "EHOS", "ELTP", "EMBR", "ENCR", "ENIP", "ERBB", "EXSL", "FARE", "FITX", "FMCC", "FMCKJ", "FNMA", "FNMAH", "FNMAS", "FNMAT", "FSPM", "FTTN", "GBLX", "GEIG", "GFOO", "GFOX", "GHDC", "GMUI", "GNIN", "GRNH", "GSPE", "GTHP", "GWPRF", "HEMP", "HFCO", "HIPP", "HJOE", "HKTU", "HKUP", "HORI", "HSCC", "IDNG", "IDOI", "IDST", "INIS", "INNO", "IPRU", "IRCE", "ITEN", "IWEB", "KDUS", "KEOSF", "KRED", "LIBE", "LIWA", "LQMT", "LVGI", "MAXD", "MCIG", "MDBX", "MDDD", "MDMJ", "MINA", "MJMJ", "MJNA", "MLCG", "MNTR", "MONK", "MRIC", "MWIP", "MYHI", "MYRY", "MZEI", "NHLD", "NHTC", "NMED", "NPWZ", "NSATF", "NVIV", "NVLX", "OBJE", "OCEE", "OREO", "OWOO", "PARR", "PHOT", "PMCM", "PROP", "PTRC", "PUGE", "PWDY", "PWEB", "RBCC", "RCHA", "RDMP", "REAC", "RFMK", "RIGH", "RJDG", "ROIL", "SANP", "SBDG", "SCIO", "SCRC", "SFMI", "SIAF", "SIMH", "SING", "SLNN", "SNGX", "SRNA", "SVAD", "SWVI", "TRIIE", "TRTC", "TTNP", "UAPC", "UPOT", "VAPE", "VAPO", "VASO", "VEND", "VGPR", "VNTH", "VPOR", "VSYM", "VUZI", "WHLM", "WTER" };
         private static string[] GooglePoints = new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume };
         private static Dictionary<string, TickReportData> notificationsList = new Dictionary<string, TickReportData>();
@@ -48,17 +48,17 @@ namespace FIRPy.Runner
             }
             else
             {
-                //Intraday();
+                Intraday();
                 MorningVolume();
             }
         }
 
         static void MorningVolume()
         {
-            var startDate = mainProvider.GetPreviousDay().AddDays(-1);
             var endDate = mainProvider.GetPreviousDay();
-            var volume = mainProvider.GetVolume(mainProvider.GetSymbolsFromList(Lists.Penny), startDate, endDate);
-            Notification.SendMorningVolumeData(volume, Delivery.Email, endDate);
+            var list = symbols;//mainProvider.GetSymbolsFromList(Lists.Penny);
+            var volume = mainProvider.GetVolume(list);
+            Notification.SendMorningVolumeData(volume, Delivery.FileServer, endDate);
         }
 
         static void TwitterRSSFeeds()
@@ -75,22 +75,25 @@ namespace FIRPy.Runner
             MACD.MACDSellSignal += new MACD.MACDHandler(MACD_MACDSellSignal);
             #endregion            
             
-            var ticks = mainProvider.GetTicks(mainProvider.GetSymbolsFromList(Lists.Penny), 61, 30, GooglePoints);
+            var list = symbols;//mainProvider.GetSymbolsFromList(Lists.Penny);
+
+            var ticks = mainProvider.GetTicks(list, 121, 30, GooglePoints);
 
             #region Main Symbol Loop
             foreach (var t in ticks)
             {
                 #region Current Data
                 var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderBy(x => x.Date);
+                var prevDayData = t.TickGroup.Where(x => !x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).Last();
 
                 if (currentDayData.Count() <= 0) { continue; }
 
                 var currentVolume = currentDayData.Sum(v => v.Volume);
                 var symbol = t.Symbol;
-                var openPrice = currentDayData.First().Close;
+                var prevClose = prevDayData.Close;
                 var currentPrice = currentDayData.Last().Close;
-                var changeInPrice = (currentPrice - openPrice);
-                var changePricePercent = (changeInPrice / openPrice) * 100;
+                var changeInPrice = (currentPrice - prevClose);
+                var changePricePercent = (changeInPrice / prevClose) * 100;
 
                 notificationsList.Add(symbol, new TickReportData()
                 {
@@ -98,7 +101,7 @@ namespace FIRPy.Runner
                     ChangeInPrice = Math.Round(changePricePercent,2),
                     CurrentPrice = currentPrice,
                     CurrentVolume = currentVolume,
-                    OpenPrice = openPrice
+                    PrevClose = prevClose
                 });
                 #endregion
 
@@ -108,13 +111,6 @@ namespace FIRPy.Runner
                 {
                     RelativeStrengthIndex.GetRSI(10, twoMinutesFiveDaysClosePrices, t.Symbol, Periods.TwoMinutesFiveDays);
                     MACD.GetMACDInfo(12, 26, 9, twoMinutesFiveDaysClosePrices, 5, t.Symbol, Periods.TwoMinutesFiveDays);
-                }
-
-                var thirtyMinutesThirtyDays = t.TickGroup30Minutes1Month.Select(x => x.Close).ToList();
-                if (thirtyMinutesThirtyDays.Count() > 0)
-                {
-                    RelativeStrengthIndex.GetRSI(10, thirtyMinutesThirtyDays, t.Symbol, Periods.ThirtyMinutesThirtyDays);
-                    MACD.GetMACDInfo(12, 26, 9, thirtyMinutesThirtyDays, 5, t.Symbol, Periods.ThirtyMinutesThirtyDays);
                 }
                 #endregion
             }
@@ -128,10 +124,6 @@ namespace FIRPy.Runner
         {
             switch (e.Period)
             {
-                case(Periods.ThirtyMinutesThirtyDays):
-                    notificationsList[e.Symbol].MACD30DBuySell = "SELL";
-                    notificationsList[e.Symbol].MACD30DHistogram = e.Histogram;
-                    break;
                 case(Periods.TwoMinutesFiveDays):
                     notificationsList[e.Symbol].MACD5DBuySell = "SELL";
                     notificationsList[e.Symbol].MACD5DHistogram = e.Histogram;
@@ -143,10 +135,6 @@ namespace FIRPy.Runner
         {
             switch (e.Period)
             {
-                case (Periods.ThirtyMinutesThirtyDays):
-                    notificationsList[e.Symbol].MACD30DBuySell = "BUY";
-                    notificationsList[e.Symbol].MACD30DHistogram = e.Histogram;
-                    break;
                 case (Periods.TwoMinutesFiveDays):
                     notificationsList[e.Symbol].MACD5DBuySell = "BUY";
                     notificationsList[e.Symbol].MACD5DHistogram = e.Histogram;
@@ -158,9 +146,6 @@ namespace FIRPy.Runner
         {
             switch (e.Period)
             {
-                case (Periods.ThirtyMinutesThirtyDays):
-                    notificationsList[e.Symbol].RSI30D = e.RSI;
-                    break;
                 case (Periods.TwoMinutesFiveDays):
                     notificationsList[e.Symbol].RSI5D = e.RSI;
                     break;
@@ -171,9 +156,6 @@ namespace FIRPy.Runner
         {
             switch (e.Period)
             {
-                case (Periods.ThirtyMinutesThirtyDays):
-                    notificationsList[e.Symbol].RSI30D = e.RSI;
-                    break;
                 case (Periods.TwoMinutesFiveDays):
                     notificationsList[e.Symbol].RSI5D = e.RSI;
                     break;
@@ -184,9 +166,6 @@ namespace FIRPy.Runner
         {
             switch (e.Period)
             {
-                case (Periods.ThirtyMinutesThirtyDays):
-                    notificationsList[e.Symbol].RSI30D = e.RSI;
-                    break;
                 case (Periods.TwoMinutesFiveDays):
                     notificationsList[e.Symbol].RSI5D = e.RSI;
                     break;

@@ -42,7 +42,7 @@ namespace FIRPy.FeedAPI
             throw new NotImplementedException();
         }
 
-        public override List<Volume> GetVolume(string[] symbols, DateTime startDate, DateTime endDate)
+        public override List<Volume> GetVolume(string[] symbols)
         {
             throw new NotImplementedException();
         }

@@ -15,7 +15,7 @@ namespace FIRPy.FeedAPI
         public abstract List<Ticks> GetSavedTicks(ConfigSettings settings, string tableName);
         public abstract void SaveTicks(List<Ticks> ticks, ConfigSettings settings, string tableName);
         public abstract List<Quote> GetQuotes(string[] quotes, DateTime startDate, DateTime endDate);
-        public abstract List<Volume> GetVolume(string[] symbols, DateTime startDate, DateTime endDate);
+        public abstract List<Volume> GetVolume(string[] symbols);
         public string[] GetRequestURL(string url)
         {
             string result = string.Empty;
@@ -51,7 +51,7 @@ namespace FIRPy.FeedAPI
                     break;
             }
 
-            return symbols;
+            return symbols.Where(x => x.Length > 0).ToArray();
         }
         public DateTime GetPreviousDay()
         {

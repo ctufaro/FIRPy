@@ -153,7 +153,8 @@ namespace FIRPy.FeedAPI
             return dtDateTime;
         }
 
-        public override List<Volume> GetVolume(string[] symbols, DateTime startDate, DateTime endDate)
+        [ObsoleteAttribute("This method is obsolete. Call GetVolume instead.", true)] 
+        public List<Volume> GetTickVolume(string[] symbols, DateTime startDate, DateTime endDate)
         {
             //Google Historicals rounds to the nearent cent, not very helpful for penny stocks
             //We need to make a seperate call just for the closing prices
@@ -198,6 +199,47 @@ namespace FIRPy.FeedAPI
                 }
             });
             return retList;
+        }
+
+        public override List<Volume> GetVolume(string[] symbols)
+        {
+            List<Volume> retVolume = new List<Volume>();
+            var tickData = GetTicks(symbols, 121, 30, new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume });
+            foreach (var td in tickData.Where(x=>x.TickGroup.Count()>0))
+            {
+                
+                    var symbol = td.Symbol;
+                    try
+                    {
+                        var currentdate = td.TickGroup.Last().Date.ToShortDateString();
+                        var currentClose = td.TickGroup.Last().Close;
+                        var prevDate = td.TickGroup.Where(x => !x.Date.ToShortDateString().Equals(currentdate)).Last().Date.ToShortDateString();
+                        var currVolume = td.TickGroup.Where(x => x.Date.ToShortDateString().Equals(currentdate)).Sum(y => y.Volume);
+                        var prevVolume = td.TickGroup.Where(x => x.Date.ToShortDateString().Equals(prevDate)).Sum(y => y.Volume);
+                        var percentDiff = Math.Round(((Convert.ToDouble(currVolume) - Convert.ToDouble(prevVolume)) / Convert.ToDouble(prevVolume)) * 100, 0);
+
+                        retVolume.Add(new Volume
+                        {
+                            Close = currentClose,
+                            CurrentVolume = currVolume,
+                            Date = DateTime.Parse(currentdate),
+                            Difference = percentDiff,
+                            Symbol = symbol
+                        });
+                    }
+                    catch
+                    {
+                        retVolume.Add(new Volume
+                        {
+                            Close = 0,
+                            CurrentVolume = 0,
+                            Date = null,
+                            Difference = 0,
+                            Symbol = "!"+symbol
+                        });
+                    }
+            }
+            return retVolume;
         }
     }
 }
