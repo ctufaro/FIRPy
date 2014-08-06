@@ -53,5 +53,18 @@ namespace FIRPy.FeedAPI
 
             return symbols;
         }
+        public DateTime GetPreviousDay()
+        {
+            //TODO: Exclude holidays
+            if (DateTime.Today.DayOfWeek.Equals(DayOfWeek.Monday))
+            {
+                return DateTime.Now.AddDays(-3);
+            }
+            else
+            {
+                return DateTime.Now.AddDays(-1);
+            }
+
+        }
     }
 }

@@ -37,13 +37,12 @@ namespace FIRPy.Notifications
             }
             else if (deliveryMethod.Equals(Delivery.Email))
             {
-                Emailer.SendEmail("Test FIRPy 2.0", html);
+                Emailer.SendEmail("FIRPy 2.0 Intraday", html);
             }
         }
 
-        public static void SendMorningVolumeData(List<Volume> data, Delivery deliveryMethod)
+        public static void SendMorningVolumeData(List<Volume> data, Delivery deliveryMethod, DateTime close)
         {
-            //get the html template
             int count = 1;
             string html = string.Empty;
             using (StreamReader sr = new StreamReader(@"../../../FIRPy.Notifications/HTMLTemplates/MorningVolume.htm"))
@@ -57,6 +56,7 @@ namespace FIRPy.Notifications
                 }
                 html = html.Replace("<!--data-->", sb.ToString());
                 html = html.Replace("<!--css-->", GetStyleSheet());
+                html = html.Replace("<!--closedate-->", close.ToShortDateString());
             }
             if (deliveryMethod.Equals(Delivery.FileServer))
             {
@@ -65,7 +65,7 @@ namespace FIRPy.Notifications
             else if (deliveryMethod.Equals(Delivery.Email))
             {
                 File.WriteAllText(@"C:\temp\volume.html", html);
-                Emailer.SendEmail("Test FIRPy 2.0", "Message Attached", @"C:\temp\volume.html");
+                Emailer.SendEmail("FIRPy 2.0 Morning Volume " + close.ToShortDateString(), "Message Attached", @"C:\temp\volume.html");
             }
         }
 

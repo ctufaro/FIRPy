@@ -17,25 +17,48 @@ namespace FIRPy.Runner
         private static string[] lotsSymbols = new string[] { "AEGA", "AEMD", "AGIN", "AHFD", "ALKM", "AMZZ", "ANYI", "APHD", "APPZ", "ASKE", "AWGI", "BCLI", "BFRE", "BKCT", "BLBK", "BLUU", "BMIX", "BRZG", "CANA", "CANN", "CANV", "CAPP", "CBDS", "CBIS", "CNAB", "CNRFF", "COCP", "COSR", "CRMB", "CTSO", "CYNK", "DDDX", "DLPM", "DMHI", "DPSM", "ECIG", "ECPN", "EDXC", "EHOS", "ELTP", "EMBR", "ENCR", "ENIP", "ERBB", "EXSL", "FARE", "FITX", "FMCC", "FMCKJ", "FNMA", "FNMAH", "FNMAS", "FNMAT", "FSPM", "FTTN", "GBLX", "GEIG", "GFOO", "GFOX", "GHDC", "GMUI", "GNIN", "GRNH", "GSPE", "GTHP", "GWPRF", "HEMP", "HFCO", "HIPP", "HJOE", "HKTU", "HKUP", "HORI", "HSCC", "IDNG", "IDOI", "IDST", "INIS", "INNO", "IPRU", "IRCE", "ITEN", "IWEB", "KDUS", "KEOSF", "KRED", "LIBE", "LIWA", "LQMT", "LVGI", "MAXD", "MCIG", "MDBX", "MDDD", "MDMJ", "MINA", "MJMJ", "MJNA", "MLCG", "MNTR", "MONK", "MRIC", "MWIP", "MYHI", "MYRY", "MZEI", "NHLD", "NHTC", "NMED", "NPWZ", "NSATF", "NVIV", "NVLX", "OBJE", "OCEE", "OREO", "OWOO", "PARR", "PHOT", "PMCM", "PROP", "PTRC", "PUGE", "PWDY", "PWEB", "RBCC", "RCHA", "RDMP", "REAC", "RFMK", "RIGH", "RJDG", "ROIL", "SANP", "SBDG", "SCIO", "SCRC", "SFMI", "SIAF", "SIMH", "SING", "SLNN", "SNGX", "SRNA", "SVAD", "SWVI", "TRIIE", "TRTC", "TTNP", "UAPC", "UPOT", "VAPE", "VAPO", "VASO", "VEND", "VGPR", "VNTH", "VPOR", "VSYM", "VUZI", "WHLM", "WTER" };
         private static string[] GooglePoints = new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume };
         private static Dictionary<string, TickReportData> notificationsList = new Dictionary<string, TickReportData>();
+        private static FeedProvider mainProvider = null;
         #endregion
 
+        /// <summary>
+        /// FIRPy Main Starting Point
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            //Intraday();
-            MorningVolume();
+            mainProvider = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             
+            if (args.Length > 0)
+            {
+                switch (args[0])
+                {
+                    //Morning Volume
+                    case("-movo"):
+                        MorningVolume();
+                        break;
+                    //Intraday
+                    case("-intra"):
+                        Intraday();
+                        break;
+                    //Morning Twitter/RSS
+                    case("-motr"):
+                        TwitterRSSFeeds();
+                        break;
+                }
+            }
+            else
+            {
+                //Intraday();
+                MorningVolume();
+            }
         }
 
         static void MorningVolume()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            Console.WriteLine("Calculating Volume");
-            FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
-            stopwatch.Start();
-            var volume = googleFeed.GetVolume(googleFeed.GetSymbolsFromList(Lists.Penny), DateTime.Parse("07/31/2014"), DateTime.Parse("08/01/2014"));
-            Notification.SendMorningVolumeData(volume, Delivery.Email);
-            Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
-            Console.ReadLine();
+            var startDate = mainProvider.GetPreviousDay().AddDays(-1);
+            var endDate = mainProvider.GetPreviousDay();
+            var volume = mainProvider.GetVolume(mainProvider.GetSymbolsFromList(Lists.Penny), startDate, endDate);
+            Notification.SendMorningVolumeData(volume, Delivery.Email, endDate);
         }
 
         static void TwitterRSSFeeds()
@@ -44,44 +67,42 @@ namespace FIRPy.Runner
 
         static void Intraday()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            ConfigSettings settings = new ConfigSettings();
-            settings.SQLiteDatabaseLocation = @"..\..\..\..\sqlite-databases\penny.sqlite";
-            FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
-            stopwatch.Start();
-            Console.WriteLine("Retrieving Ticks");
-            var ticks = googleFeed.GetTicks(googleFeed.GetSymbolsFromList(Lists.Penny), 61, 30, GooglePoints);
-            //var ticks = googleFeed.GetSavedTicks(settings, "ticks");
-
+            #region Subscribed Events
             RelativeStrengthIndex.RSIGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIGreaterThan70);
             RelativeStrengthIndex.RSILessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSILessThan30);
             RelativeStrengthIndex.RSIFlat += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIFlat);
             MACD.MACDBuySignal += new MACD.MACDHandler(MACD_MACDBuySignal);
             MACD.MACDSellSignal += new MACD.MACDHandler(MACD_MACDSellSignal);
+            #endregion            
+            
+            var ticks = mainProvider.GetTicks(mainProvider.GetSymbolsFromList(Lists.Penny), 61, 30, GooglePoints);
 
+            #region Main Symbol Loop
             foreach (var t in ticks)
             {
+                #region Current Data
                 var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderBy(x => x.Date);
 
-                if (currentDayData.Count() <= 0)
-                    continue;
+                if (currentDayData.Count() <= 0) { continue; }
 
                 var currentVolume = currentDayData.Sum(v => v.Volume);
                 var symbol = t.Symbol;
                 var openPrice = currentDayData.First().Close;
                 var currentPrice = currentDayData.Last().Close;
                 var changeInPrice = (currentPrice - openPrice);
-                var changePercent = (changeInPrice / openPrice) * 100;
+                var changePricePercent = (changeInPrice / openPrice) * 100;
 
                 notificationsList.Add(symbol, new TickReportData()
                 {
                     Symbol = symbol,
-                    ChangeInPrice = Math.Round(changePercent,2),
+                    ChangeInPrice = Math.Round(changePricePercent,2),
                     CurrentPrice = currentPrice,
                     CurrentVolume = currentVolume,
                     OpenPrice = openPrice
                 });
+                #endregion
 
+                #region Intraday Ticks Indicators Events
                 var twoMinutesFiveDaysClosePrices = t.TickGroup2Minutes5Days.Select(x => x.Close).ToList();
                 if (twoMinutesFiveDaysClosePrices.Count() > 0)
                 {
@@ -95,16 +116,11 @@ namespace FIRPy.Runner
                     RelativeStrengthIndex.GetRSI(10, thirtyMinutesThirtyDays, t.Symbol, Periods.ThirtyMinutesThirtyDays);
                     MACD.GetMACDInfo(12, 26, 9, thirtyMinutesThirtyDays, 5, t.Symbol, Periods.ThirtyMinutesThirtyDays);
                 }
+                #endregion
             }
-
-            //googleFeed.SaveTicks(ticks, settings, "ticks"); 
-
-            Console.WriteLine("Completed @ {0}", stopwatch.Elapsed);
+            #endregion
 
             Notification.SendTickReportData(notificationsList, Delivery.FileServer);
-
-            stopwatch.Stop();
-            Console.ReadLine();
         }
 
         #region Indicator Events
