@@ -38,6 +38,11 @@ namespace FIRPy.Notifications
             {
                 Emailer.SendEmail("FIRPy 2.0 Intraday", html);
             }
+            else if (deliveryMethod.Equals(Delivery.FTP))
+            {
+                File.WriteAllText(@"C:\temp\intraday.html",html);
+                FTP.Upload(@"C:\temp\intraday.html");
+            }
         }
 
         public static void SendMorningVolumeData(List<Volume> data, Delivery deliveryMethod, DateTime close)

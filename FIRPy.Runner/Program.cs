@@ -13,7 +13,7 @@ namespace FIRPy.Runner
     class Program
     {
         #region Private Variables
-        private static string[] symbols = new string[] { "GEIG", "DNAX", "VGPR", "VLNX" };
+        private static string[] symbols = new string[] { "GEIG" };
         private static string[] lotsSymbols = new string[] { "AEGA", "AEMD", "AGIN", "AHFD", "ALKM", "AMZZ", "ANYI", "APHD", "APPZ", "ASKE", "AWGI", "BCLI", "BFRE", "BKCT", "BLBK", "BLUU", "BMIX", "BRZG", "CANA", "CANN", "CANV", "CAPP", "CBDS", "CBIS", "CNAB", "CNRFF", "COCP", "COSR", "CRMB", "CTSO", "CYNK", "DDDX", "DLPM", "DMHI", "DPSM", "ECIG", "ECPN", "EDXC", "EHOS", "ELTP", "EMBR", "ENCR", "ENIP", "ERBB", "EXSL", "FARE", "FITX", "FMCC", "FMCKJ", "FNMA", "FNMAH", "FNMAS", "FNMAT", "FSPM", "FTTN", "GBLX", "GEIG", "GFOO", "GFOX", "GHDC", "GMUI", "GNIN", "GRNH", "GSPE", "GTHP", "GWPRF", "HEMP", "HFCO", "HIPP", "HJOE", "HKTU", "HKUP", "HORI", "HSCC", "IDNG", "IDOI", "IDST", "INIS", "INNO", "IPRU", "IRCE", "ITEN", "IWEB", "KDUS", "KEOSF", "KRED", "LIBE", "LIWA", "LQMT", "LVGI", "MAXD", "MCIG", "MDBX", "MDDD", "MDMJ", "MINA", "MJMJ", "MJNA", "MLCG", "MNTR", "MONK", "MRIC", "MWIP", "MYHI", "MYRY", "MZEI", "NHLD", "NHTC", "NMED", "NPWZ", "NSATF", "NVIV", "NVLX", "OBJE", "OCEE", "OREO", "OWOO", "PARR", "PHOT", "PMCM", "PROP", "PTRC", "PUGE", "PWDY", "PWEB", "RBCC", "RCHA", "RDMP", "REAC", "RFMK", "RIGH", "RJDG", "ROIL", "SANP", "SBDG", "SCIO", "SCRC", "SFMI", "SIAF", "SIMH", "SING", "SLNN", "SNGX", "SRNA", "SVAD", "SWVI", "TRIIE", "TRTC", "TTNP", "UAPC", "UPOT", "VAPE", "VAPO", "VASO", "VEND", "VGPR", "VNTH", "VPOR", "VSYM", "VUZI", "WHLM", "WTER" };
         private static string[] GooglePoints = new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume };
         private static Dictionary<string, TickReportData> notificationsList = new Dictionary<string, TickReportData>();
@@ -49,7 +49,7 @@ namespace FIRPy.Runner
             else
             {
                 Intraday();
-                MorningVolume();
+                //MorningVolume();
             }
         }
 
@@ -80,20 +80,23 @@ namespace FIRPy.Runner
             var ticks = mainProvider.GetTicks(list, 121, 30, GooglePoints);
 
             #region Main Symbol Loop
+            //TODO:Too much logic here
             foreach (var t in ticks)
             {
                 #region Current Data
-                var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderBy(x => x.Date);
-                var prevDayData = t.TickGroup.Where(x => !x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).Last();
-
+                var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderByDescending(x => x.Date);
                 if (currentDayData.Count() <= 0) { continue; }
+                
+                var prevDayData = t.TickGroup.Where(x => !x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).Last();                
 
                 var currentVolume = currentDayData.Sum(v => v.Volume);
                 var symbol = t.Symbol;
                 var prevClose = prevDayData.Close;
-                var currentPrice = currentDayData.Last().Close;
+                var currentPrice = currentDayData.First().Close;
                 var changeInPrice = (currentPrice - prevClose);
                 var changePricePercent = (changeInPrice / prevClose) * 100;
+                var changeInVolumeArray = currentDayData.Take(2).Where(x=>x.Volume>0).ToArray();
+                var changeInVolume = Math.Round(Convert.ToDouble(changeInVolumeArray[0].Volume) - Convert.ToDouble(changeInVolumeArray[1].Volume) / Convert.ToDouble(changeInVolumeArray[1].Volume), 0);
 
                 notificationsList.Add(symbol, new TickReportData()
                 {
@@ -116,7 +119,7 @@ namespace FIRPy.Runner
             }
             #endregion
 
-            Notification.SendTickReportData(notificationsList, Delivery.FileServer);
+            Notification.SendTickReportData(notificationsList, Delivery.FTP);
         }
 
         #region Indicator Events
