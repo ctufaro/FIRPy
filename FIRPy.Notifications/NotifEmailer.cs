@@ -9,11 +9,11 @@ using System.Net.Mail;
 
 namespace FIRPy.Notifications
 {
-    public class Emailer
+    public class NotifEmailer
     {
         public static void SendEmail(string subject, string body, string attachment = "")
         {
-           
+            
             string gUser = ConfigurationSettings.AppSettings["GmailUser"];
             string gEmail = ConfigurationSettings.AppSettings["GmailEmail"];
             string gPassword = ConfigurationSettings.AppSettings["GmailPassword"];

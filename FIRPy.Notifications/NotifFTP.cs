@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -7,13 +8,13 @@ using System.IO;
 
 namespace FIRPy.Notifications
 {
-    public class FTP
+    public class NotifFTP
     {
         public static void Upload(string filename)
         {
-            string ftpServerIP = @"";
-            string ftpUserName = "";
-            string ftpPassword = "";
+            string ftpServerIP = ConfigurationSettings.AppSettings["FtpServerIP"];
+            string ftpUserName = ConfigurationSettings.AppSettings["FtpUserName"];
+            string ftpPassword = ConfigurationSettings.AppSettings["FtpPassword"];
 
             FileInfo objFile = new FileInfo(filename);
             FtpWebRequest objFTPRequest;

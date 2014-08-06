@@ -40,9 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Emailer.cs" />
-    <Compile Include="FTP.cs" />
-    <Compile Include="Notification.cs" />
+    <Compile Include="NotifEmailer.cs" />
+    <Compile Include="NotifFTP.cs" />
+    <Compile Include="NotifSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,14 @@ namespace FIRPy.DomainObjects
         public readonly static string Date = "date";
     }
 
+    public class Paths
+    {
+        public readonly static string CSSStylePath = @"../../../FIRPy.Notifications/CSS/style.css";
+        public readonly static string TickReportDataHtmlPath = @"../../../FIRPy.Notifications/HTMLTemplates/TickReportData.htm";
+        public readonly static string MorningVolumeHtmlPath = @"../../../FIRPy.Notifications/HTMLTemplates/MorningVolume.htm";
+    }
+
+
     public enum FeedAPIProviders
     {
         Google, Yahoo, Bloomberg

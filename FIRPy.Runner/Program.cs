@@ -29,7 +29,10 @@ namespace FIRPy.Runner
             mainProvider = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             
             if (args.Length > 0)
-            {
+            {                
+                //Penny Stocks
+                symbols = mainProvider.GetSymbolsFromList(Lists.Penny);
+                
                 switch (args[0])
                 {
                     //Morning Volume
@@ -48,7 +51,7 @@ namespace FIRPy.Runner
             }
             else
             {
-                Intraday();
+                //Intraday();
                 //MorningVolume();
             }
         }
@@ -56,9 +59,10 @@ namespace FIRPy.Runner
         static void MorningVolume()
         {
             var endDate = mainProvider.GetPreviousDay();
-            var list = symbols;//mainProvider.GetSymbolsFromList(Lists.Penny);
-            var volume = mainProvider.GetVolume(list);
-            Notification.SendMorningVolumeData(volume, Delivery.FileServer, endDate);
+
+            var volume = mainProvider.GetVolume(symbols);
+
+            NotifSender.SendMorningVolumeData(volume, Delivery.FTP, endDate);
         }
 
         static void TwitterRSSFeeds()
@@ -67,60 +71,39 @@ namespace FIRPy.Runner
 
         static void Intraday()
         {
-            #region Subscribed Events
-            RelativeStrengthIndex.RSIGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIGreaterThan70);
-            RelativeStrengthIndex.RSILessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSILessThan30);
-            RelativeStrengthIndex.RSIFlat += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIFlat);
-            MACD.MACDBuySignal += new MACD.MACDHandler(MACD_MACDBuySignal);
-            MACD.MACDSellSignal += new MACD.MACDHandler(MACD_MACDSellSignal);
-            #endregion            
+            SubscribeEvents();
             
-            var list = symbols;//mainProvider.GetSymbolsFromList(Lists.Penny);
-
-            var ticks = mainProvider.GetTicks(list, 121, 30, GooglePoints);
+            var ticks = mainProvider.GetTicks(symbols, 121, 30, GooglePoints);
 
             #region Main Symbol Loop
-            //TODO:Too much logic here
-            foreach (var t in ticks)
+            foreach (var tick in ticks.Where(t=>t.TickGroup.Count()>0))
             {
-                #region Current Data
-                var currentDayData = t.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderByDescending(x => x.Date);
-                if (currentDayData.Count() <= 0) { continue; }
-                
-                var prevDayData = t.TickGroup.Where(x => !x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).Last();                
-
-                var currentVolume = currentDayData.Sum(v => v.Volume);
-                var symbol = t.Symbol;
-                var prevClose = prevDayData.Close;
-                var currentPrice = currentDayData.First().Close;
-                var changeInPrice = (currentPrice - prevClose);
-                var changePricePercent = (changeInPrice / prevClose) * 100;
-                var changeInVolumeArray = currentDayData.Take(2).Where(x=>x.Volume>0).ToArray();
-                var changeInVolume = Math.Round(Convert.ToDouble(changeInVolumeArray[0].Volume) - Convert.ToDouble(changeInVolumeArray[1].Volume) / Convert.ToDouble(changeInVolumeArray[1].Volume), 0);
-
-                notificationsList.Add(symbol, new TickReportData()
-                {
-                    Symbol = symbol,
-                    ChangeInPrice = Math.Round(changePricePercent,2),
-                    CurrentPrice = currentPrice,
-                    CurrentVolume = currentVolume,
-                    PrevClose = prevClose
-                });
-                #endregion
+                notificationsList.Add(tick.Symbol,mainProvider.GenerateTickReportData(tick));
 
                 #region Intraday Ticks Indicators Events
-                var twoMinutesFiveDaysClosePrices = t.TickGroup2Minutes5Days.Select(x => x.Close).ToList();
+                var twoMinutesFiveDaysClosePrices = tick.TickGroup2Minutes5Days.Select(x => x.Close).ToList();
                 if (twoMinutesFiveDaysClosePrices.Count() > 0)
                 {
-                    RelativeStrengthIndex.GetRSI(10, twoMinutesFiveDaysClosePrices, t.Symbol, Periods.TwoMinutesFiveDays);
-                    MACD.GetMACDInfo(12, 26, 9, twoMinutesFiveDaysClosePrices, 5, t.Symbol, Periods.TwoMinutesFiveDays);
+                    RelativeStrengthIndex.GetRSI(10, twoMinutesFiveDaysClosePrices, tick.Symbol, Periods.TwoMinutesFiveDays);
+                    MACD.GetMACDInfo(12, 26, 9, twoMinutesFiveDaysClosePrices, 5, tick.Symbol, Periods.TwoMinutesFiveDays);
                 }
                 #endregion
             }
             #endregion
 
-            Notification.SendTickReportData(notificationsList, Delivery.FTP);
+            NotifSender.SendTickReportData(notificationsList, Delivery.FTP);
         }
+
+        #region Subscribed Events
+        static void SubscribeEvents()
+        {
+            RelativeStrengthIndex.RSIGreaterThan70 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIGreaterThan70);
+            RelativeStrengthIndex.RSILessThan30 += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSILessThan30);
+            RelativeStrengthIndex.RSIFlat += new RelativeStrengthIndex.RSIHandler(RelativeStrengthIndex_RSIFlat);
+            MACD.MACDBuySignal += new MACD.MACDHandler(MACD_MACDBuySignal);
+            MACD.MACDSellSignal += new MACD.MACDHandler(MACD_MACDSellSignal);
+        }
+        #endregion
 
         #region Indicator Events
         static void MACD_MACDSellSignal(object sender, MACDEventArgs e)

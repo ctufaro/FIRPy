@@ -46,5 +46,10 @@ namespace FIRPy.FeedAPI
         {
             throw new NotImplementedException();
         }
+
+        public override TickReportData GenerateTickReportData(Ticks ticks)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
