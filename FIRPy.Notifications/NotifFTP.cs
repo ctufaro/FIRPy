@@ -87,5 +87,39 @@ namespace FIRPy.Notifications
                 UploadFile(file, addtionalFolder);
             });
         }
+
+        public static void DeleteFiles(string additionalFolder)
+        {
+            string tempLocation = "ftp://" + ftpServerIP + additionalFolder;
+            FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create(new Uri(tempLocation));
+            ftpRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+            ftpRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+            List<string> files = new List<string>();
+
+            using (FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse())
+            {
+                using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                {                  
+                    string line = streamReader.ReadLine();
+                    while (!string.IsNullOrEmpty(line))
+                    {
+                        files.Add(line);
+                        line = streamReader.ReadLine();
+                    }
+
+                }
+            }
+
+            foreach (string f in files)
+            { 
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://" + ftpServerIP + f);
+                request.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+                using (FtpWebResponse responseDel = (FtpWebResponse)request.GetResponse())
+                {
+                    
+                }
+            }
+        }
     }
 }

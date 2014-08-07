@@ -18,8 +18,15 @@ namespace FIRPy.Notifications
         
         public static void SendTickReportData(Dictionary<string, TickReportData> data, Delivery deliveryMethod)
         {
+            //TODO: Refactor this pile
+            foreach (string s in Directory.GetFiles(TempGraphsDirectory)) { File.Delete(s); }
             NotifDownloader.DownloadAndSaveChartFile(data.Keys.ToArray(), TempGraphsDirectory);
-            NotifFTP.UploadFiles(Directory.GetFiles(TempGraphsDirectory), "graphs");
+            if (deliveryMethod.Equals(Delivery.FTP))
+            {
+                NotifFTP.DeleteFiles("graphs");
+                NotifFTP.UploadFiles(Directory.GetFiles(TempGraphsDirectory), "graphs");
+            }
+            //TODO: Refactor this pile
            
             int count = 1;
             string html = GetResourceFromPath(TickReportDataHtmlPath);
