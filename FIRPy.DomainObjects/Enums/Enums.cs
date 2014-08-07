@@ -17,9 +17,9 @@ namespace FIRPy.DomainObjects
 
     public class Paths
     {
-        public readonly static string CSSStylePath = @"../../../FIRPy.Notifications/CSS/style.css";
-        public readonly static string TickReportDataHtmlPath = @"../../../FIRPy.Notifications/HTMLTemplates/TickReportData.htm";
-        public readonly static string MorningVolumeHtmlPath = @"../../../FIRPy.Notifications/HTMLTemplates/MorningVolume.htm";
+        public readonly static string CSSStylePath = @"C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\CSS\style.css";
+        public readonly static string TickReportDataHtmlPath = @"C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\HTMLTemplates\TickReportData.htm";
+        public readonly static string MorningVolumeHtmlPath = @"C:\Users\Chris\My Projects\FIRPy\FIRPy.Notifications\HTMLTemplates\MorningVolume.htm";
     }
 
 
