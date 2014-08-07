@@ -54,7 +54,7 @@ namespace FIRPy.ChartEngine
 
             FeedProvider mainProvider = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
             var GooglePoints = new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume };
-            var ticks = mainProvider.GetTicks(new string[] { "GEIG" }, 121, 30, GooglePoints).First();
+            var ticks = mainProvider.GetTicks(new string[] { "TSLA" }, 121, 30, GooglePoints).First();
 
             int i = 0;
             foreach (var k in ticks.TickGroup.Where(d => d.Date.ToShortDateString().Equals("8/6/2014")))

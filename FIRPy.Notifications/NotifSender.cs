@@ -20,13 +20,13 @@ namespace FIRPy.Notifications
             int count = 1;
             string html = GetResourceFromPath(TickReportDataHtmlPath);
             StringBuilder sb = new StringBuilder();
-            string tableFormat = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td></tr>";
+            string tableFormat = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td><td><img src='http://stockcharts.com/c-sc/sc?s={9}&p=D&b=5&g=1&i=p97703862546'/></td></tr>";
             
             foreach (var key in data.Keys.OrderBy(x => x.ToLower()))
             {
                 var tickData = data[key];
                 var rsi5 = (tickData.RSI5D == -1) ? "-" : tickData.RSI5D.ToString();
-                sb.Append(string.Format(tableFormat, count++, tickData.Symbol, tickData.PrevClose, tickData.CurrentVolume.ToString("#,##0"), tickData.CurrentPrice, ChangeInText(tickData.ChangeInPrice), rsi5, tickData.MACD5DHistogram, tickData.MACD5DBuySell));
+                sb.Append(string.Format(tableFormat, count++, tickData.Symbol, tickData.PrevClose, tickData.CurrentVolume.ToString("#,##0"), tickData.CurrentPrice, ChangeInText(tickData.ChangeInPrice), rsi5, tickData.MACD5DHistogram, tickData.MACD5DBuySell, tickData.Symbol));
             }
             
             html = html.Replace("<!--data-->", sb.ToString());
