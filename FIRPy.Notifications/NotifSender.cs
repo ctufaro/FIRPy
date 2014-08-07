@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,15 @@ namespace FIRPy.Notifications
 {
     public class NotifSender
     {
+        private static string TickReportDataHtmlPath = ConfigurationSettings.AppSettings["TickReportDataHtmlPath"];
+        private static string MorningVolumeHtmlPath = ConfigurationSettings.AppSettings["MorningVolumeHtmlPath"];
+        private static string CSSStylePath = ConfigurationSettings.AppSettings["CSSStylePath"];
+        private static string TableSortJS = ConfigurationSettings.AppSettings["TableSortJS"]; 
+        
         public static void SendTickReportData(Dictionary<string, TickReportData> data, Delivery deliveryMethod)
         {
             int count = 1;
-            string html = GetHTMLFromPath(Paths.TickReportDataHtmlPath);
+            string html = GetResourceFromPath(TickReportDataHtmlPath);
             StringBuilder sb = new StringBuilder();
             string tableFormat = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td></tr>";
             
@@ -24,7 +30,8 @@ namespace FIRPy.Notifications
             }
             
             html = html.Replace("<!--data-->", sb.ToString());
-            html = html.Replace("<!--css-->", GetStyleSheet());
+            html = html.Replace("<!--css-->", GetResourceFromPath(CSSStylePath));
+            html = html.Replace("<!--js-->", GetResourceFromPath(TableSortJS));
             html = html.Replace("<!--rundate-->", DateTime.Now.ToString());
 
             Send(html, deliveryMethod, @"C:\temp\intraday.html", "FIRPy 2.0 Intraday");
@@ -33,17 +40,18 @@ namespace FIRPy.Notifications
         public static void SendMorningVolumeData(List<Volume> data, Delivery deliveryMethod, DateTime close)
         {
             int count = 1;
-            string html = GetHTMLFromPath(Paths.MorningVolumeHtmlPath);
+            string html = GetResourceFromPath(MorningVolumeHtmlPath);
             StringBuilder sb = new StringBuilder();
             string tableFormat = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td></tr>";
             
             foreach (var v in data.OrderByDescending(cv => cv.CurrentVolume).ThenByDescending(d => d.Difference))
             {
-                sb.Append(string.Format(tableFormat, count++, (v.Date == null) ? "-" : v.Date.Value.ToShortDateString(), v.Symbol, v.CurrentVolume.ToString("#,##0"), ChangeInText(v.Difference), v.Close));
+                sb.Append(string.Format(tableFormat, count++, (v.Date == null) ? "-" : v.Date.Value.ToShortDateString(), v.Symbol, v.CurrentVolume, ChangeInText(v.Difference), v.Close));
             }
 
             html = html.Replace("<!--data-->", sb.ToString());
-            html = html.Replace("<!--css-->", GetStyleSheet());
+            html = html.Replace("<!--css-->", GetResourceFromPath(CSSStylePath));
+            html = html.Replace("<!--js-->", GetResourceFromPath(TableSortJS));
             html = html.Replace("<!--closedate-->", close.ToShortDateString());
             
             Send(html, deliveryMethod, @"C:\temp\volume.html", "FIRPy 2.0 Morning Volume");
@@ -67,17 +75,7 @@ namespace FIRPy.Notifications
             }
         }
 
-        private static string GetStyleSheet()
-        {
-            string css = string.Empty;
-            using (StreamReader sr = new StreamReader(Paths.CSSStylePath))
-            {
-                css = sr.ReadToEnd();
-            }
-            return css;
-        }
-
-        private static string GetHTMLFromPath(string path)
+        private static string GetResourceFromPath(string path)
         {
             string returnHTML = string.Empty;
             using (StreamReader sr = new StreamReader(path))

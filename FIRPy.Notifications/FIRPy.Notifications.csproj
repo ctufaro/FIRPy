@@ -55,6 +55,7 @@
   <ItemGroup>
     <Content Include="CSS\style.css" />
     <Content Include="HTMLTemplates\MorningVolume.htm" />
+    <Content Include="HTMLTemplates\TableSortJS.htm" />
     <Content Include="HTMLTemplates\TickReportData.htm" />
     <Content Include="HTMLTemplates\TwitterRSSFeeds.htm" />
   </ItemGroup>

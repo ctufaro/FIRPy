@@ -20,6 +20,10 @@
     {
         text-align: left;
     }
+    #table-6 th:hover
+    {
+        cursor:pointer;
+    }
     #table-6 thead th
     {
         background: -moz-linear-gradient(top, #F0F0F0 0, #DBDBDB 100%);
