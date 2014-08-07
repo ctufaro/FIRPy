@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 
@@ -10,17 +12,27 @@ namespace FIRPy.Notifications
 {
     public class NotifFTP
     {
-        public static void Upload(string filename)
+        private static string ftpServerIP = ConfigurationSettings.AppSettings["FtpServerIP"];
+        private static string ftpUserName = ConfigurationSettings.AppSettings["FtpUserName"];
+        private static string ftpPassword = ConfigurationSettings.AppSettings["FtpPassword"];
+        
+        public static void UploadFile(string filename, string addtionalFolder = "")
         {
-            string ftpServerIP = ConfigurationSettings.AppSettings["FtpServerIP"];
-            string ftpUserName = ConfigurationSettings.AppSettings["FtpUserName"];
-            string ftpPassword = ConfigurationSettings.AppSettings["FtpPassword"];
-
+            string tempLocation = string.Empty;
             FileInfo objFile = new FileInfo(filename);
             FtpWebRequest objFTPRequest;
 
+            if (!string.IsNullOrEmpty(addtionalFolder))
+            {
+                tempLocation = ftpServerIP + addtionalFolder;
+            }
+            else
+            {
+                tempLocation = ftpServerIP;
+            }
+
             // Create FtpWebRequest object 
-            objFTPRequest = (FtpWebRequest)FtpWebRequest.Create(new Uri("ftp://" + ftpServerIP + "/" + objFile.Name));
+            objFTPRequest = (FtpWebRequest)FtpWebRequest.Create(new Uri("ftp://" + tempLocation + "/" + objFile.Name));
 
             // Set Credintials
             objFTPRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
@@ -66,6 +78,14 @@ namespace FIRPy.Notifications
             {
                 throw ex;
             }
+        }
+
+        public static void UploadFiles(string[] files, string addtionalFolder = "")
+        {
+            Parallel.ForEach(files, file =>
+            {
+                UploadFile(file, addtionalFolder);
+            });
         }
     }
 }
