@@ -247,6 +247,7 @@ namespace FIRPy.FeedAPI
             TickReportData retData = new TickReportData();
             var currentDayData = tick.TickGroup.Where(x => x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString())).OrderByDescending(x => x.Date);
             var prevDayData = tick.TickGroup.Where(x => !x.Date.ToShortDateString().Equals(DateTime.Today.ToShortDateString()));
+            retData.Symbol = tick.Symbol;
 
             if (currentDayData.Count() > 0 && prevDayData.Count() > 0)
             {
@@ -259,7 +260,6 @@ namespace FIRPy.FeedAPI
                 //var changeInVolumeArray = currentDayData.Take(2).Where(x => x.Volume > 0).ToArray();
                 //var changeInVolume = Math.Round(Convert.ToDouble(changeInVolumeArray[0].Volume) - Convert.ToDouble(changeInVolumeArray[1].Volume) / Convert.ToDouble(changeInVolumeArray[1].Volume), 0);
 
-                retData.Symbol = symbol;
                 retData.ChangeInPrice = Math.Round(changePricePercent, 2);
                 retData.CurrentPrice = currentPrice;
                 retData.CurrentVolume = currentVolume;
