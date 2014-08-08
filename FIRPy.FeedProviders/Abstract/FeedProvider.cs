@@ -54,6 +54,20 @@ namespace FIRPy.FeedAPI
 
             return symbols.Where(x => x.Length > 0).ToArray();
         }
+
+
+        public List<string> GetPositions()
+        {
+            List<string> retPositions = new List<string>();
+            var positions = GetRequestURL("https://raw.githubusercontent.com/ctufaro/FIRPy/master/Resources/positions/positions.txt");
+            foreach (string pos in positions.Where(x=>x.Length>0))
+            {
+                retPositions.Add(pos.Split(new string[] { "," }, StringSplitOptions.None)[0]);
+            }
+            return retPositions;
+        }
+
+
         public DateTime GetPreviousDay()
         {
             //TODO: Exclude holidays

@@ -18,5 +18,13 @@ namespace FIRPy.UnitTests
             var symbols = googleFeed.GetSymbolsFromList(Lists.Penny);
             Assert.IsTrue(symbols.Length > 0);
         }
+
+        [TestMethod]
+        public void Get_Positions_From_Github()
+        {
+            FeedProvider googleFeed = FeedAPIFactory.GetStockFeedFactory(FeedAPIProviders.Google);
+            var symbols = googleFeed.GetPositions();
+            Assert.IsTrue(symbols.Count() > 0);
+        }
     }
 }

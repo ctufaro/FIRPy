@@ -7,6 +7,7 @@ namespace FIRPy.DomainObjects
 {
     public class TickReportData
     {
+        public string HasPosition { get; set; }
         public string Symbol { get; set; }
         public double PrevClose { get; set; }
         public int CurrentVolume { get; set; }
