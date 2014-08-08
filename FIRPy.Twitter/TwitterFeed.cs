@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using Tweetinvi;
 using Tweetinvi.Json;
 using TweetinviCore.Enum;
@@ -15,14 +16,15 @@ using TweetinviCore.Interfaces.Models;
 using TweetinviCore.Interfaces.oAuth;
 using TweetinviCore.Interfaces.Streaminvi;
 using Stream = Tweetinvi.Stream;
+using FIRPy.DomainObjects;
 
-namespace Examplinvi
+namespace FIRPy.Twitter
 {
-    class Program
+    public class TwitterFeed
     {
         private const string USER_SCREEN_NAME_TO_TEST = "ladygaga";
 
-        static void Main()
+        public static void Init()
         {
             TwitterCredentials.SetCredentials("1137829801-oRXN1Lay1TzQFpugF1bz7BBB7tAxQOiunUJhJzm",
                 "j0uQCykXwKMuNuINwVbnDvTVjBAIKrMvKYaXpjyNlIV4f",
@@ -38,7 +40,7 @@ namespace Examplinvi
             //MessageExamples();
             //TweetListExamples();
             //GeoExamples();
-            SearchExamples();
+            //SearchExamples();
             //SavedSearchesExamples();
             //RateLimitExamples();
             //HelpExamples();
@@ -46,8 +48,8 @@ namespace Examplinvi
             //StreamExamples();
             //OtherFeaturesExamples();
 
-            Console.WriteLine(@"END");
-            Console.ReadLine();
+            //Console.WriteLine(@"END");
+            //Console.ReadLine();
         }
 
         #region Examples Store
@@ -922,10 +924,39 @@ namespace Examplinvi
             // IF YOU DO NOT RECEIVE ANY TWEET, CHANGE THE PARAMETERS!
             var tweets = Search.SearchTweets("$vlnx");
 
-            foreach (var tweet in tweets)
+            foreach (var tweet in tweets.Take(5))
             {
-                Console.WriteLine("{0}:{1}", tweet.Creator.ScreenName, tweet.Text);
+                Console.WriteLine("{0}{1}", tweet.Creator.ScreenName, tweet.Text);
             }
+        }
+
+        public static List<TwitterRSSReportData> GetTweets(string[] positions, string[] symbols)
+        {
+            Object tLock = new Object();
+            
+            List<TwitterRSSReportData> retTweets = new List<TwitterRSSReportData>();
+            Parallel.ForEach(symbols, symbol =>
+            {
+                try
+                {
+                    var tweets = Search.SearchTweets("$" + symbol);
+                    foreach (var tweet in tweets.Take(5))
+                    {
+                        lock (tLock)
+                        {
+                            retTweets.Add(new TwitterRSSReportData
+                            {
+                                HasPosition = "",
+                                Symbol = symbol,
+                                Tweet = string.Format("<b>{0}</b> {1}", tweet.Creator.ScreenName, tweet.Text)
+                            });
+                        }
+                    }
+                }
+                catch { }
+            });
+
+            return retTweets;
         }
 
         private static void Search_SearchTweet()

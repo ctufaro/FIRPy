@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using FIRPy.DomainObjects;
+using FIRPy.Twitter;
 
 namespace FIRPy.Notifications
 {
@@ -12,6 +13,7 @@ namespace FIRPy.Notifications
     {
         private static string TickReportDataHtmlPath = ConfigurationSettings.AppSettings["TickReportDataHtmlPath"];
         private static string MorningVolumeHtmlPath = ConfigurationSettings.AppSettings["MorningVolumeHtmlPath"];
+        private static string TwitterRSSHtmlPath = ConfigurationSettings.AppSettings["TwitterRSSHtmlPath"];
         private static string CSSStylePath = ConfigurationSettings.AppSettings["CSSStylePath"];
         private static string TableSortJS = ConfigurationSettings.AppSettings["TableSortJS"];
         private static string TempGraphsDirectory = ConfigurationSettings.AppSettings["TempGraphsDirectory"]; 
@@ -115,5 +117,23 @@ namespace FIRPy.Notifications
             return "<span style='" + style + "'>" + price + "%</span>";
         }
 
+        public static void SendTwitterRSSFeeds(string[] symbols, Delivery delivery)
+        {
+            TwitterFeed.Init();
+            StringBuilder sb = new StringBuilder();
+            string html = GetResourceFromPath(TwitterRSSHtmlPath);
+            var twitterRSSReportData = TwitterFeed.GetTweets(null, symbols);
+            string tableFormat = @"<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>";
+            foreach (var t in twitterRSSReportData)
+            {
+                sb.Append(string.Format(tableFormat, t.HasPosition, t.Symbol, t.Tweet));
+            }
+            html = html.Replace("<!--data-->", sb.ToString());
+            html = html.Replace("<!--css-->", GetResourceFromPath(CSSStylePath).Replace("text-align:center;", "text-align:left;"));
+            html = html.Replace("<!--js-->", GetResourceFromPath(TableSortJS));
+            html = html.Replace("<!--rundate-->", DateTime.Now.ToString());
+
+            Send(html, delivery, @"C:\temp\twitterss.html", "FIRPy 2.0 Twitter RSS");
+        }
     }
 }

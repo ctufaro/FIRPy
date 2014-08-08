@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +51,10 @@
     <ProjectReference Include="..\FIRPy.DomainObjects\FIRPy.DomainObjects.csproj">
       <Project>{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}</Project>
       <Name>FIRPy.DomainObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FIRPy.Twitter\FIRPy.Twitter.csproj">
+      <Project>{484EB398-48F2-4A05-B20A-347706B858B7}</Project>
+      <Name>FIRPy.Twitter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

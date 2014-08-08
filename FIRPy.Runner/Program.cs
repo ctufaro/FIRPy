@@ -51,8 +51,9 @@ namespace FIRPy.Runner
             }
             else
             {
-                Intraday();
+                //Intraday();
                 //MorningVolume();
+                TwitterRSSFeeds();
             }
         }
 
@@ -67,6 +68,7 @@ namespace FIRPy.Runner
 
         static void TwitterRSSFeeds()
         {
+            NotifSender.SendTwitterRSSFeeds(symbols, Delivery.FTP);
         }
 
         static void Intraday()

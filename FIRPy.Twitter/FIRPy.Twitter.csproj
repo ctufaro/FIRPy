@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{484EB398-48F2-4A05-B20A-347706B858B7}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FIRPy.Twitter</RootNamespace>
     <AssemblyName>FIRPy.Twitter</AssemblyName>
@@ -48,11 +48,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cheatsheet.cs" />
+    <Compile Include="TwitterFeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FIRPy.DomainObjects\FIRPy.DomainObjects.csproj">
+      <Project>{CC2796F9-A8E2-492B-A357-BD40FA47B3D9}</Project>
+      <Name>FIRPy.DomainObjects</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
