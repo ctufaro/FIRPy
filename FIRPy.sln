@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", 
 		Assemblies\System.Data.SQLite.dll = Assemblies\System.Data.SQLite.dll
 		Assemblies\System.Data.SQLite.Linq.dll = Assemblies\System.Data.SQLite.Linq.dll
 		Assemblies\TA-Lib-Core.dll = Assemblies\TA-Lib-Core.dll
+		Assemblies\Tweetinvi.API.dll = Assemblies\Tweetinvi.API.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Runner", "FIRPy.Runner\FIRPy.Runner.csproj", "{87824739-4B01-42E9-AF9E-BE7545B13083}"

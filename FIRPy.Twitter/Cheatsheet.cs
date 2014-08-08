@@ -1,54 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
-using System.IO;
+using System.Drawing;
 using System.Linq;
 using Tweetinvi;
-using Tweetinvi.Core.Enum;
-using Tweetinvi.Core.Extensions;
-using Tweetinvi.Core.Interfaces;
-using Tweetinvi.Core.Interfaces.Controllers;
-using Tweetinvi.Core.Interfaces.DTO;
-using Tweetinvi.Core.Interfaces.Models;
-using Tweetinvi.Core.Interfaces.Models.Parameters;
-using Tweetinvi.Core.Interfaces.oAuth;
-using Tweetinvi.Core.Interfaces.Streaminvi;
 using Tweetinvi.Json;
+using TweetinviCore.Enum;
+using TweetinviCore.Extensions;
+using TweetinviCore.Interfaces;
+using TweetinviCore.Interfaces.Controllers;
+using TweetinviCore.Interfaces.DTO;
+using TweetinviCore.Interfaces.Models;
+using TweetinviCore.Interfaces.oAuth;
+using TweetinviCore.Interfaces.Streaminvi;
 using Stream = Tweetinvi.Stream;
 
 namespace Examplinvi
 {
-    // IMPORTANT 
-    // This cheat sheet provide examples for all the features provided by Tweetinvi.
-
-    // WINDOWS PHONE 8 developers
-    // If you are a windows phone developer, please use the Async classes
-    // User.GetLoggedUser(); -> await UserAsync.GetLoggedUser();
-
     class Program
     {
         private const string USER_SCREEN_NAME_TO_TEST = "ladygaga";
 
         static void Main()
         {
-            TwitterCredentials.SetCredentials("Access_Token", "Access_Token_Secret", "Consumer_Key", "Consumer_Secret");
+            TwitterCredentials.SetCredentials("1137829801-oRXN1Lay1TzQFpugF1bz7BBB7tAxQOiunUJhJzm",
+                "j0uQCykXwKMuNuINwVbnDvTVjBAIKrMvKYaXpjyNlIV4f",
+                "lYFyJfdsJEGxtcuKnDOF2fHNp",
+                "ZUggAd2kh0isxasIWJ44fzzNPbFwB8zADuXFyn3tsCrI7YCUAP");
 
-            GenerateCredentialExamples();
-            UserLiveFeedExamples();
-            TweetExamples();
-            UserExamples();
-            LoggedUserExamples();
-            TimelineExamples();
-            MessageExamples();
-            TweetListExamples();
-            GeoExamples();
+            //GenerateCredentialExamples();
+            //UserLiveFeedExamples();
+            //TweetExamples();
+            //UserExamples();
+            //LoggedUserExamples();
+            //TimelineExamples();
+            //MessageExamples();
+            //TweetListExamples();
+            //GeoExamples();
             SearchExamples();
-            SavedSearchesExamples();
-            RateLimitExamples();
-            HelpExamples();
-            JsonExamples();
-            StreamExamples();
-            OtherFeaturesExamples();
+            //SavedSearchesExamples();
+            //RateLimitExamples();
+            //HelpExamples();
+            //JsonExamples();
+            //StreamExamples();
+            //OtherFeaturesExamples();
 
             Console.WriteLine(@"END");
             Console.ReadLine();
@@ -62,7 +58,7 @@ namespace Examplinvi
         private static void GenerateCredentialExamples()
         {
             // With captcha
-            //CredentialsCreator_WithCaptcha_StepByStep("CONSUMER_KEY", "CONSUMER_SECRET");
+            //CredentialsCreator_WithCaptcha_StepByStep(ConfigurationManager.AppSettings["token_ConsumerKey"], ConfigurationManager.AppSettings["token_ConsumerSecret"]);
             //CredentialsCreator_WithCaptcha_SingleStep(ConfigurationManager.AppSettings["token_ConsumerKey"], ConfigurationManager.AppSettings["token_ConsumerSecret"]);
 
             // With callback URL
@@ -83,8 +79,6 @@ namespace Examplinvi
             // Tweet_GetExistingTweet(210462857140252672);
 
             // Tweet_PublishTweet(String.Format("I love tweetinvi! ({0})", Guid.NewGuid()));
-            // Tweet_PublishTweetWithImage("Uploadinvi?", "YOUR_FILE_PATH.png");
-
             // Tweet_PublishTweetInReplyToAnotherTweet(String.Format("I love tweetinvi! ({0})", Guid.NewGuid()), 392711547081854976);
             // Tweet_PublishTweetWithGeo(String.Format("I love tweetinvi! ({0})", Guid.NewGuid()));
             // Tweet_PublishTweetWithGeo_Coordinates(String.Format("I love tweetinvi! ({0})", Guid.NewGuid()));
@@ -174,9 +168,9 @@ namespace Examplinvi
 
         private static void SearchExamples()
         {
-            // Search_SimpleTweetSearch();
-            // Search_SearchTweet();
-            // Search_FilteredSearch();
+            Search_SimpleTweetSearch();
+            //Search_SearchTweet();
+            //Search_FilteredSearch();
         }
 
         private static void SavedSearchesExamples()
@@ -364,24 +358,6 @@ namespace Examplinvi
             newTweet.Publish();
 
             Console.WriteLine(newTweet.IsTweetPublished);
-        }
-
-        private static void Tweet_PublishTweetWithImage(string text, string filePath, string filepath2 = null)
-        {
-            byte[] file1 = File.ReadAllBytes(filePath);
-
-            // Create a tweet with a single image
-            var tweet = Tweet.CreateTweetWithMedia(text, file1);
-
-            // !! MOST ACCOUNTS ARE LIMITED TO 1 File per Tweet     !!
-            // !! IF YOU ADD 2 MEDIA, YOU MAY HAVE ONLY 1 PUBLISHED !!
-            if (filepath2 != null)
-            {
-                byte[] file2 = File.ReadAllBytes(filepath2);
-                tweet.AddMedia(file2);
-            }
-
-            tweet.Publish();
         }
 
         private static void Tweet_PublishTweetInReplyToAnotherTweet(string text, long tweetIdtoRespondTo)
@@ -611,15 +587,59 @@ namespace Examplinvi
         private static void User_DownloadProfileImage(string userName)
         {
             var user = User.GetUserFromScreenName(userName);
-            var stream = user.GetProfileImageStream(ImageSize.bigger);
-            var fileStream = new FileStream(String.Format("{0}.jpg", user.Id), FileMode.Create);
-            stream.CopyTo(fileStream);
 
-            string assemblyPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-            if (assemblyPath != null)
+            if (user.DownloadProfileImage(String.Format("{0}.jpg", userName), ImageSize.bigger))
             {
-                Process.Start(assemblyPath);
+                string assemblyPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+                if (assemblyPath != null)
+                {
+                    Process.Start(assemblyPath);
+                }
             }
+        }
+
+        private static void User_DownloadProfileImageAsync(string userName)
+        {
+            var user = User.GetUserFromScreenName(userName);
+            string filePath = String.Format("{0}.jpg", userName);
+            double currentPercentage = 0;
+
+            user.DownloadProfileImageAsync(filePath, success =>
+            {
+                Console.WriteLine("File downloaded, opening the containing folder...");
+                string assemblyPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+                if (assemblyPath != null) { Process.Start(assemblyPath); }
+            },
+            (currentBytesDownloaded, totalBytesToDownload) =>
+            {
+                var percentage = ((double)currentBytesDownloaded / totalBytesToDownload) * 100;
+                if (percentage - currentPercentage >= 10)
+                {
+                    currentPercentage = percentage;
+                    Console.WriteLine("Download progress : {0}", percentage);
+                }
+            });
+
+            Console.WriteLine("This is async youhou!");
+        }
+
+        private static void User_GenerateProfileImageStream(string userName)
+        {
+            var user = User.GetUserFromScreenName(userName);
+            var stream = user.GenerateProfileImageStream();
+            var bitmap = new Bitmap(stream);
+            bitmap.Save("tmp.bmp");
+
+            Console.WriteLine("File Saved");
+        }
+
+        private static void User_GenerateProfileImageBitmap(string userName)
+        {
+            var user = User.GetUserFromScreenName(userName);
+            var bitmap = user.GenerateProfileImageBitmap();
+            bitmap.Save("tmp.bmp");
+
+            Console.WriteLine("File Saved");
         }
 
         #endregion
@@ -825,7 +845,7 @@ namespace Examplinvi
             var currentUser = User.GetLoggedUser();
             var tweetLists = TweetList.GetUserLists(currentUser, true);
 
-            tweetLists.ForEach(list => Console.WriteLine("- {0}", list.FullName));
+            tweetLists.Foreach(list => Console.WriteLine("- {0}", list.FullName));
         }
 
         private static void TweetList_GetExistingListById(long listId)
@@ -864,7 +884,7 @@ namespace Examplinvi
             var list = TweetList.GetExistingList(listId);
             var tweets = list.GetTweets();
 
-            tweets.ForEach(t => Console.WriteLine(t.Text));
+            tweets.Foreach(t => Console.WriteLine(t.Text));
         }
 
         private static void TweetList_GetMembersOfList(long listId)
@@ -872,7 +892,7 @@ namespace Examplinvi
             var list = TweetList.GetExistingList(listId);
             var members = list.GetMembers();
 
-            members.ForEach(x => Console.WriteLine(x.Name));
+            members.Foreach(x => Console.WriteLine(x.Name));
         }
 
         #endregion
@@ -900,11 +920,11 @@ namespace Examplinvi
         private static void Search_SimpleTweetSearch()
         {
             // IF YOU DO NOT RECEIVE ANY TWEET, CHANGE THE PARAMETERS!
-            var tweets = Search.SearchTweets("#obama");
+            var tweets = Search.SearchTweets("$vlnx");
 
             foreach (var tweet in tweets)
             {
-                Console.WriteLine("{0}", tweet.Text);
+                Console.WriteLine("{0}:{1}", tweet.Creator.ScreenName, tweet.Text);
             }
         }
 
@@ -918,8 +938,7 @@ namespace Examplinvi
             searchParameter.Lang = Language.English;
             searchParameter.SearchType = SearchResultType.Popular;
             searchParameter.MaximumNumberOfResults = 100;
-            searchParameter.Since = new DateTime(2013, 12, 1);
-            searchParameter.Until = new DateTime(2013, 12, 11);
+            searchParameter.Until = new DateTime(2013, 12, 1);
             searchParameter.SinceId = 399616835892781056;
             searchParameter.MaxId = 405001488843284480;
 
@@ -998,7 +1017,12 @@ namespace Examplinvi
 
         private static void GetCredentialsRateLimits()
         {
-            var credentials = TwitterCredentials.CreateCredentials("ACCESS_TOKEN", "ACCESS_TOKEN_SECRET", "CONSUMER_KEY", "CONSUMER_SECRET");
+            var credentials = TwitterCredentials.CreateCredentials(
+               ConfigurationManager.AppSettings["token_AccessToken"],
+               ConfigurationManager.AppSettings["token_AccessTokenSecret"],
+               ConfigurationManager.AppSettings["token_ConsumerKey"],
+               ConfigurationManager.AppSettings["token_ConsumerSecret"]);
+
             var tokenRateLimits = RateLimit.GetCredentialsRateLimits(credentials);
 
             Console.WriteLine("Remaning Requests for GetRate : {0}", tokenRateLimits.ApplicationRateLimitStatusLimit.Remaining);
@@ -1361,7 +1385,7 @@ namespace Examplinvi
 
             // Execute Query can either return a json or a DTO interface
             var tweetsDTO = TwitterAccessor.ExecuteGETQuery<IEnumerable<ITweetDTO>>(getHomeTimelineQuery);
-            tweetsDTO.ForEach(tweetDTO => Console.WriteLine(tweetDTO.Text));
+            tweetsDTO.Foreach(tweetDTO => Console.WriteLine(tweetDTO.Text));
         }
 
         #endregion
