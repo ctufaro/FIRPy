@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Runner", "FIRPy.Runne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Indicators", "FIRPy.Indicators\FIRPy.Indicators.csproj", "{294C18CA-844C-4681-8407-43EF14C499C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Twitter", "FIRPy.Twitter\FIRPy.Twitter.csproj", "{45F63E3E-028D-4AA5-8920-24DB77B45670}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.Twitter", "FIRPy.Twitter\FIRPy.Twitter.csproj", "{484EB398-48F2-4A05-B20A-347706B858B7}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -120,16 +120,16 @@ Global
 		{294C18CA-844C-4681-8407-43EF14C499C2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{294C18CA-844C-4681-8407-43EF14C499C2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{294C18CA-844C-4681-8407-43EF14C499C2}.Release|x86.ActiveCfg = Release|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{45F63E3E-028D-4AA5-8920-24DB77B45670}.Release|x86.ActiveCfg = Release|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{484EB398-48F2-4A05-B20A-347706B858B7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

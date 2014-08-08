@@ -32,16 +32,6 @@ namespace Examplinvi
         static void Main()
         {
             TwitterCredentials.SetCredentials("Access_Token", "Access_Token_Secret", "Consumer_Key", "Consumer_Secret");
-            TwitterCredentials.SetCredentials("1577389800-c8ecF1YWfYJjFraEohBHxqv37xXDnsAOoQOP4vX", "YZ3wcpMDX7ydZ8IPVkbBpcUWIyRnTqTnudyjD9Fm8g", "5EpUsp9mbMMRMJ0zqsug", "cau8CExOCUordXMJeoGfW0QoPTp6bUAOrqUELKk1CSM");
-
-            var timelineParameter = Timeline.CreateUserTimelineRequestParameter(783214);
-            
-            timelineParameter.MaxId = 324863731907575808;
-            timelineParameter.IncludeRTS = true;
-            timelineParameter.MaximumNumberOfTweetsToRetrieve = 200;
-
-            var tweets = Timeline.GetUserTimeline(timelineParameter);
-            var searched = tweets.Where(x => x.Contributors != null && x.Contributors.Any()).ToArray();
 
             GenerateCredentialExamples();
             UserLiveFeedExamples();
@@ -835,7 +825,7 @@ namespace Examplinvi
             var currentUser = User.GetLoggedUser();
             var tweetLists = TweetList.GetUserLists(currentUser, true);
 
-            tweetLists.Foreach(list => Console.WriteLine("- {0}", list.FullName));
+            tweetLists.ForEach(list => Console.WriteLine("- {0}", list.FullName));
         }
 
         private static void TweetList_GetExistingListById(long listId)
@@ -874,7 +864,7 @@ namespace Examplinvi
             var list = TweetList.GetExistingList(listId);
             var tweets = list.GetTweets();
 
-            tweets.Foreach(t => Console.WriteLine(t.Text));
+            tweets.ForEach(t => Console.WriteLine(t.Text));
         }
 
         private static void TweetList_GetMembersOfList(long listId)
@@ -882,7 +872,7 @@ namespace Examplinvi
             var list = TweetList.GetExistingList(listId);
             var members = list.GetMembers();
 
-            members.Foreach(x => Console.WriteLine(x.Name));
+            members.ForEach(x => Console.WriteLine(x.Name));
         }
 
         #endregion
@@ -1371,7 +1361,7 @@ namespace Examplinvi
 
             // Execute Query can either return a json or a DTO interface
             var tweetsDTO = TwitterAccessor.ExecuteGETQuery<IEnumerable<ITweetDTO>>(getHomeTimelineQuery);
-            tweetsDTO.Foreach(tweetDTO => Console.WriteLine(tweetDTO.Text));
+            tweetsDTO.ForEach(tweetDTO => Console.WriteLine(tweetDTO.Text));
         }
 
         #endregion
