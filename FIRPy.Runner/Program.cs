@@ -68,7 +68,7 @@ namespace FIRPy.Runner
 
         static void TwitterRSSFeeds()
         {
-            NotifSender.SendTwitterRSSFeeds(symbols, Delivery.FTP);
+            NotifSender.SendTwitterRSSFeeds(symbols, mainProvider.GetPositions(), Delivery.FTP);
         }
 
         static void Intraday()

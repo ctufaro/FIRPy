@@ -927,7 +927,7 @@ namespace FIRPy.Twitter
             }
         }
 
-        public static List<TwitterRSSReportData> GetTweets(string[] positions, string[] symbols)
+        public static List<TwitterRSSReportData> GetTweets(string[] symbols, List<string> positions)
         {
             Object tLock = new Object();
             
@@ -937,15 +937,15 @@ namespace FIRPy.Twitter
                 try
                 {
                     var tweets = Search.SearchTweets("$" + symbol);
-                    foreach (var tweet in tweets.Take(5))
+                    foreach (var tweet in tweets.Take(10))
                     {
                         lock (tLock)
                         {
                             retTweets.Add(new TwitterRSSReportData
                             {
-                                HasPosition = "",
+                                HasPosition = (positions.Contains(symbol))?"Y":string.Empty,
                                 Symbol = symbol,
-                                Tweet = string.Format("<b>{0}</b> {1}", tweet.Creator.ScreenName, tweet.Text)
+                                Tweet = string.Format("<img src='{0}'/> <b>{1}</b> {2}", tweet.Creator.ProfileImageUrl, tweet.Creator.ScreenName, tweet.Text)
                             });
                         }
                     }
