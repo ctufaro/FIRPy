@@ -24,12 +24,9 @@ namespace FIRPy.Twitter
     {
         private const string USER_SCREEN_NAME_TO_TEST = "ladygaga";
 
-        public static void Init()
+        public static void Init(string accessToken, string userAccessSecret, string consumerKey, string consumerSecret)
         {
-            TwitterCredentials.SetCredentials("1137829801-oRXN1Lay1TzQFpugF1bz7BBB7tAxQOiunUJhJzm",
-                "j0uQCykXwKMuNuINwVbnDvTVjBAIKrMvKYaXpjyNlIV4f",
-                "lYFyJfdsJEGxtcuKnDOF2fHNp",
-                "ZUggAd2kh0isxasIWJ44fzzNPbFwB8zADuXFyn3tsCrI7YCUAP");
+            TwitterCredentials.SetCredentials(accessToken, userAccessSecret, consumerKey, consumerSecret);
 
             //GenerateCredentialExamples();
             //UserLiveFeedExamples();

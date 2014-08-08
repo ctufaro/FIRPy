@@ -16,7 +16,11 @@ namespace FIRPy.Notifications
         private static string TwitterRSSHtmlPath = ConfigurationSettings.AppSettings["TwitterRSSHtmlPath"];
         private static string CSSStylePath = ConfigurationSettings.AppSettings["CSSStylePath"];
         private static string TableSortJS = ConfigurationSettings.AppSettings["TableSortJS"];
-        private static string TempGraphsDirectory = ConfigurationSettings.AppSettings["TempGraphsDirectory"]; 
+        private static string TempGraphsDirectory = ConfigurationSettings.AppSettings["TempGraphsDirectory"];
+        private static string AccessToken = ConfigurationSettings.AppSettings["AccessToken"];
+        private static string UserAccessSecret = ConfigurationSettings.AppSettings["UserAccessSecret"];
+        private static string ConsumerKey = ConfigurationSettings.AppSettings["ConsumerKey"];
+        private static string ConsumerSecret = ConfigurationSettings.AppSettings["ConsumerSecret"];
         
         public static void SendTickReportData(Dictionary<string, TickReportData> data, Delivery deliveryMethod)
         {
@@ -119,7 +123,7 @@ namespace FIRPy.Notifications
 
         public static void SendTwitterRSSFeeds(string[] symbols, Delivery delivery)
         {
-            TwitterFeed.Init();
+            TwitterFeed.Init(AccessToken, UserAccessSecret, ConsumerKey, ConsumerSecret);
             StringBuilder sb = new StringBuilder();
             string html = GetResourceFromPath(TwitterRSSHtmlPath);
             var twitterRSSReportData = TwitterFeed.GetTweets(null, symbols);
