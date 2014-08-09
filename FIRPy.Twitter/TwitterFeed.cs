@@ -936,19 +936,17 @@ namespace FIRPy.Twitter
             {
                 try
                 {
-                    var tweets = Search.SearchTweets("$" + symbol);
-                    foreach (var tweet in tweets.Take(10))
-                    {
-                        lock (tLock)
+                        var tweets = Search.SearchTweets("$" + symbol);
+                        foreach (var tweet in tweets.Take(10))
                         {
                             retTweets.Add(new TwitterRSSReportData
                             {
-                                HasPosition = (positions.Contains(symbol))?"Y":string.Empty,
+                                HasPosition = (positions.Contains(symbol)) ? "Y" : string.Empty,
                                 Symbol = symbol,
                                 Tweet = string.Format("<img src='{0}'/> <b>{1}</b> {2}", tweet.Creator.ProfileImageUrl, tweet.Creator.ScreenName, tweet.Text)
                             });
+
                         }
-                    }
                 }
                 catch { }
             });
