@@ -128,7 +128,7 @@ namespace FIRPy.Notifications
             string html = GetResourceFromPath(TwitterRSSHtmlPath);
             var twitterRSSReportData = TwitterFeed.GetTweets(symbols, positions);
             string tableFormat = @"<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>";
-            foreach (var t in twitterRSSReportData)
+            foreach (var t in twitterRSSReportData.Where(t=>t.Tweet!=null))
             {
                 sb.Append(string.Format(tableFormat, t.HasPosition, t.Symbol, t.Tweet));
             }
