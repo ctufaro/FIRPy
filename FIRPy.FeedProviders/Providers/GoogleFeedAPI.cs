@@ -258,8 +258,15 @@ namespace FIRPy.FeedAPI
                 var currentPrice = currentDayData.First().Close;
                 var changeInPrice = (currentPrice - prevClose);
                 var changePricePercent = (changeInPrice / prevClose) * 100;
-                //var changeInVolumeArray = currentDayData.Take(2).Where(x => x.Volume > 0).ToArray();
-                //var changeInVolume = Math.Round(Convert.ToDouble(changeInVolumeArray[0].Volume) - Convert.ToDouble(changeInVolumeArray[1].Volume) / Convert.ToDouble(changeInVolumeArray[1].Volume), 0);
+
+                //TODO: Refactor this pile
+                //if (currentDayData.Count() >= 2)
+                //{                    
+                //    var changeInVolumeArray = currentDayData.Take(2).ToArray();
+                //    var changeInVolume = Math.Round(Convert.ToDouble(changeInVolumeArray[0].Volume) - Convert.ToDouble(changeInVolumeArray[1].Volume) / Convert.ToDouble(changeInVolumeArray[1].Volume), 0);
+                //    retData.ChangeInVolume = changeInVolume;
+                //}
+                
                 retData.HasPosition = (positions.Contains(symbol)) ? "Y" : string.Empty;
                 retData.ChangeInPrice = Math.Round(changePricePercent, 2);
                 retData.CurrentPrice = currentPrice;
