@@ -7,6 +7,7 @@ using FIRPy.FeedAPI;
 using FIRPy.DomainObjects;
 using FIRPy.Indicators;
 using FIRPy.Notifications;
+using log4net;
 
 namespace FIRPy.Runner
 {
@@ -18,6 +19,7 @@ namespace FIRPy.Runner
         private static string[] GooglePoints = new string[] { QuoteDataPoints.Date, QuoteDataPoints.Open, QuoteDataPoints.High, QuoteDataPoints.Low, QuoteDataPoints.Close, QuoteDataPoints.Volume };
         private static Dictionary<string, TickReportData> notificationsList = new Dictionary<string, TickReportData>();
         private static FeedProvider mainProvider = null;
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger("RollingFileAppender");
         #endregion
 
         /// <summary>
@@ -32,21 +34,30 @@ namespace FIRPy.Runner
             {                
                 //Penny Stocks
                 symbols = mainProvider.GetSymbolsFromList(Lists.Penny);
-                
-                switch (args[0])
+
+                try
                 {
-                    //Morning Volume
-                    case("-movo"):
-                        MorningVolume();
-                        break;
-                    //Intraday
-                    case("-intra"):
-                        Intraday();
-                        break;
-                    //Morning Twitter/RSS
-                    case("-motr"):
-                        TwitterRSSFeeds();
-                        break;
+                    switch (args[0])
+                    {
+                        //Morning Volume
+                        case ("-movo"):
+                            MorningVolume();
+                            break;
+                        //Intraday
+                        case ("-intra"):
+                            Intraday();
+                            break;
+                        //Morning Twitter/RSS
+                        case ("-motr"):
+                            TwitterRSSFeeds();
+                            break;
+                    }
+
+                    log.Info(string.Format("{0} Ran Successfully", args[0]));
+                }
+                catch(Exception e) 
+                {
+                    log.Error(string.Format("Error while running {0}:", e.ToString()));                
                 }
             }
             else
@@ -54,6 +65,9 @@ namespace FIRPy.Runner
                 Intraday();
                 //MorningVolume();
                 //TwitterRSSFeeds();
+
+                log.Info("FIRPy Ran Successfully");
+
             }
         }
 

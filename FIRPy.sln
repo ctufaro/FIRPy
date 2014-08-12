@@ -15,6 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIRPy.DataAccess", "FIRPy.D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assemblies", "Assemblies", "{A9BC5D19-11C2-4F36-9CE8-34AA049292F6}"
 	ProjectSection(SolutionItems) = preProject
+		Assemblies\log4net.dll = Assemblies\log4net.dll
 		Assemblies\System.Data.SQLite.dll = Assemblies\System.Data.SQLite.dll
 		Assemblies\System.Data.SQLite.Linq.dll = Assemblies\System.Data.SQLite.Linq.dll
 		Assemblies\TA-Lib-Core.dll = Assemblies\TA-Lib-Core.dll
