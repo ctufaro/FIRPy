@@ -54,8 +54,6 @@ namespace FIRPy.FeedAPI
 
             return symbols.Where(x => x.Length > 0).ToArray();
         }
-
-
         public List<string> GetPositions()
         {
             List<string> retPositions = new List<string>();
@@ -66,8 +64,6 @@ namespace FIRPy.FeedAPI
             }
             return retPositions;
         }
-
-
         public DateTime GetPreviousDay()
         {
             //TODO: Exclude holidays
@@ -80,6 +76,16 @@ namespace FIRPy.FeedAPI
                 return DateTime.Now.AddDays(-1);
             }
 
+        }
+        public List<string> GetBeeters()
+        {
+            List<string> beeters = new List<string>();
+            var positions = GetRequestURL("https://raw.githubusercontent.com/ctufaro/FIRPy/master/Resources/beeters/beeters.txt");
+            foreach (string pos in positions.Where(x => x.Length > 0))
+            {
+                beeters.Add(pos.Split(new string[] { "," }, StringSplitOptions.None)[0]);
+            }
+            return beeters;
         }
     }
 }

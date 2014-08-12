@@ -927,7 +927,7 @@ namespace FIRPy.Twitter
             }
         }
 
-        public static List<TwitterRSSReportData> GetTweets(string[] symbols, List<string> positions)
+        public static List<TwitterRSSReportData> GetTweets(string[] symbols, List<string> positions, List<string> beeters)
         {
             Object tLock = new Object();
             
@@ -939,12 +939,15 @@ namespace FIRPy.Twitter
                         var tweets = Search.SearchTweets("$" + symbol);
                         foreach (var tweet in tweets.Take(10))
                         {
-                            retTweets.Add(new TwitterRSSReportData
+                            if (!beeters.Contains(tweet.Creator.Name))
                             {
-                                HasPosition = (positions.Contains(symbol)) ? "Y" : string.Empty,
-                                Symbol = symbol,
-                                Tweet = string.Format("<img src='{0}'/> <b>{1}</b> {2}", tweet.Creator.ProfileImageUrl, tweet.Creator.ScreenName, tweet.Text)
-                            });
+                                retTweets.Add(new TwitterRSSReportData
+                                {
+                                    HasPosition = (positions.Contains(symbol)) ? "Y" : string.Empty,
+                                    Symbol = symbol,
+                                    Tweet = string.Format("<img src='{0}'/> <b>{1}</b> {2} <small>({3})</small>", tweet.Creator.ProfileImageUrl, tweet.Creator.Name, tweet.Text, tweet.CreatedAt.ToString())
+                                });
+                            }
 
                         }
                 }

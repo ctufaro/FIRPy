@@ -122,12 +122,12 @@ namespace FIRPy.Notifications
             return "<span style='" + style + "'>" + price + "%</span>";
         }
 
-        public static void SendTwitterRSSFeeds(string[] symbols, List<string> positions, Delivery delivery)
+        public static void SendTwitterRSSFeeds(string[] symbols, List<string> positions, Delivery delivery, List<string> beeters)
         {
             TwitterFeed.Init(AccessToken, UserAccessSecret, ConsumerKey, ConsumerSecret);
             StringBuilder sb = new StringBuilder();
             string html = GetResourceFromPath(TwitterRSSHtmlPath);
-            var twitterRSSReportData = TwitterFeed.GetTweets(symbols, positions);
+            var twitterRSSReportData = TwitterFeed.GetTweets(symbols, positions, beeters);
             string tableFormat = @"<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>";
             foreach (var t in twitterRSSReportData.Where(t=>t.Tweet!=null))
             {

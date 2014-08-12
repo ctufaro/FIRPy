@@ -62,12 +62,10 @@ namespace FIRPy.Runner
             }
             else
             {
-                Intraday();
+                //Intraday();
                 //MorningVolume();
-                //TwitterRSSFeeds();
-
+                TwitterRSSFeeds();
                 log.Info("FIRPy Ran Successfully");
-
             }
         }
 
@@ -82,7 +80,7 @@ namespace FIRPy.Runner
 
         static void TwitterRSSFeeds()
         {
-            NotifSender.SendTwitterRSSFeeds(symbols, mainProvider.GetPositions(), Delivery.FTP);
+            NotifSender.SendTwitterRSSFeeds(symbols, mainProvider.GetPositions(), Delivery.FTP, mainProvider.GetBeeters());
         }
 
         static void Intraday()
