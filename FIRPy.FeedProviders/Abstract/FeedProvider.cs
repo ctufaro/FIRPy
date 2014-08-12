@@ -80,10 +80,10 @@ namespace FIRPy.FeedAPI
         public List<string> GetBeeters()
         {
             List<string> beeters = new List<string>();
-            var positions = GetRequestURL("https://raw.githubusercontent.com/ctufaro/FIRPy/master/Resources/beeters/beeters.txt");
-            foreach (string pos in positions.Where(x => x.Length > 0))
+            var beets = GetRequestURL("https://raw.githubusercontent.com/ctufaro/FIRPy/master/Resources/beeters/beeters.txt");
+            foreach (string bet in beets.Where(x => x.Length > 0))
             {
-                beeters.Add(pos.Split(new string[] { "," }, StringSplitOptions.None)[0]);
+                beeters.Add(bet);
             }
             return beeters;
         }

@@ -937,7 +937,7 @@ namespace FIRPy.Twitter
                 try
                 {
                         var tweets = Search.SearchTweets("$" + symbol);
-                        foreach (var tweet in tweets.Take(10))
+                        foreach (var tweet in tweets.Take(15))
                         {
                             if (!beeters.Contains(tweet.Creator.Name))
                             {
